@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_tirage_photo_delete', {'id': tirage_photo.id , 'tirage' : tirage}) }}" onsubmit="return confirm('Vous voulez vraiment supprimer cette liste de tirage photo?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tirage_photo.id) }}">
+    <button class="btn"><i class="fa fa-trash" aria-hidden="true"></i></button>
+</form>

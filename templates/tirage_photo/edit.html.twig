@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit TiragePhoto{% endblock %}
+
+{% block body %}
+{% if (tirage != 'Tirage Identite') %}
+        <section>
+            <div class='container'>
+                <div class='row'>
+                    <div class='col-4'></div>
+                    <div class='col-4'>
+                        <h1 class='text-center'>Modifier le tirage</h1>
+                        <hr>
+                            {{ form_start(form) }}
+                                {{ form_row(form.photo)}}
+                                {{ form_row(form.tirage)}}
+                                {{ form_row(form.options)}}
+                                <button class="btn btn-outline-danger">{{ button_label|default('modifier')}}</button>
+                            {{ form_end(form) }}
+                    </div>
+                    <div class='col-4'></div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class='container'>
+                <div class='row'>
+                    <div class='col-12'>
+                        {% if not tirage_photo.photos is empty %}
+                            <hr>
+                            <p class='text-end fw-bold'>({{tirage_photo.photos|length}}) photos</p>
+                            <hr>
+                            
+                                <div class='d-flex flex-wrap'>
+                                {% for photo in tirage_photo.photos %}
+                                    <div class='m-2 position-relative'>
+                                        <div>
+                                        <img src="{{ asset('uploads/tirage/' ~ photo.photo) }}"  alt="tirage" id='photo_tirage' class='card-img-top Regular shadow rounded'>
+                                        </div>
+                                        {# si nbre des photos = 1 alors on met le lien pour retire le tiragePhoto de la db #}
+                                        {% if tirage_photo.photos|length == 1 %}
+                                            <div class='position-absolute top-0 end-0' id='delete'>
+                                                {{ include('tirage_photo/_delete_form.html.twig') }}
+                                            </div>
+                                        {% else %}
+                                            <div class='position-absolute top-0 end-0' id='delete'>
+                                                {{ include('photo/_delete_form.html.twig') }}
+                                            </div>
+                                        {% endif %}
+                                        
+                                    </div>
+                                {% endfor %}
+                                </div>
+                        
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% else %}
+        <section>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-2'></div>
+                <div class='col-3'>
+                    <h1 class='text-center'>Modifier le tirage</h1>
+                    <hr>
+                        {{ form_start(form) }}
+                            {{ form_row(form.photo)}}
+                            {{ form_row(form.tirage)}}
+                            <button class="btn btn-outline-danger">{{ button_label|default('modifier')}}</button>
+                        {{ form_end(form) }}
+                </div>
+                <div class='col-3'>
+                    {% if not tirage_photo.photos is empty %}
+                        
+                        {% for photo in tirage_photo.photos %}
+                                
+                            <img src="{{ asset('uploads/tirage/' ~ photo.photo) }}"  alt="tirage"  class='card-img-top Regular shadow rounded mt-5'>
+                        
+                        {% endfor %}
+                            
+                    {% endif %}
+                </div>
+                <div class='col-2'></div>
+            </div>
+        </div>
+    </section>
+    
+{% endif %}
+{% endblock %}

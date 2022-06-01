@@ -2,11 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Tirage;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Tirage|null find($id, $lockMode = null, $lockVersion = null)
@@ -44,6 +45,92 @@ class TirageRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
+
+    /**
+     * on recupere le prix min du tirage standard
+     *
+     * @return void
+     */
+    public function getPrixMinTirageStandard(){
+        $query = $this->createQueryBuilder('t');
+        $query->select('t.prix')
+            ->andwhere($query->expr()->like('t.tirage', $query->expr()->literal("Tirage Photo%")))
+            ->orderBy('t.prix' , 'ASC')
+            ->setMaxResults(1)
+            ;
+        return $query->getQuery()->getOneOrNullResult();
+    }
+    /**
+     * on recupere le prix min du tirage identité
+     *
+     * @return void
+     */
+    public function getPrixMinTirageIdentite(){
+        $query = $this->createQueryBuilder('t');
+        $query->select('t.prix')
+            ->andwhere($query->expr()->like('t.tirage', $query->expr()->literal("Tirage Identite%")))
+            ->orderBy('t.prix' , 'ASC')
+            ->setMaxResults(1)
+            ;
+        return $query->getQuery()->getOneOrNullResult();
+    }
+
+    public function getId(){
+        $query = $this->createQueryBuilder('t')
+            ->select('t.id' ,'t.prix') 
+            ;
+        return $query->getQuery()->getResult();;
+    }
+
+    // /**
+    //  * cette requette permet de recuperer la liste des types dans la table tirage
+    //  */
+    // public function getTypesTirage()
+    // {
+    //     $query = $this->createQueryBuilder('t')
+    //         ->select('DISTINCT t.typeTirage')
+    //         ;
+    //     return $query->getQuery()->getResult();
+    // }
+  
+   
+
+    // /**
+    //  * cette fonction permet de recupere la liste des format par type
+    //  *
+    //  * @param [type] $value
+    //  * @return void
+    //  */
+    // public function getFormatsTirage($value)
+    // {
+    //     $query = $this->createQueryBuilder('t')
+    //         ->select('t.format')
+    //         ->andWhere('t.typeTirage = :val')
+    //         ->setParameter('val', $value)
+    //         ;
+    //     return $query->getQuery()->getResult();
+    // }
+
+
+    // /**
+    //  * cette fonction permet de recupere le prix d'un format par type
+    //  *
+    //  * @param [type] $value
+    //  * @return void
+    //  */
+    // public function getPrixFormatTirage($type , $format)
+    // {
+    //     $query = $this->createQueryBuilder('t')
+    //         ->select('t.prix')
+    //         ->andWhere('t.format = :val')
+    //         ->setParameter('val', $format)
+    //         ->andWhere('t.typeTirage = :val')
+    //         ->setParameter('val', $type)
+    //         ;
+    //     return $query->getQuery()->getOneOrNullResult();
+    //  }
+  
+
 
     // /**
     //  * @return Tirage[] Returns an array of Tirage objects

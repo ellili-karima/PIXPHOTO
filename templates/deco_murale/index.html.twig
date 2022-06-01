@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Décoration Murale{% endblock %}
+{% block javascripts %}
+			<script src="{{ asset('js/menu.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+   <section>
+        <div class='container'>
+            <div class='row'>
+                <div class="col-6">
+                    <a href="{{path('app_deco_murale_tile')}}">Tile</a>
+                </div>
+                <div class="col-6">
+                    <a href="">Toile</a>
+                </div>
+                <div class="col-6">
+                    <a href="">mdf</a>
+                </div>
+                <div class="col-6">
+                    <a href="">Cadre photo</a>
+                </div>
+            </div>
+        </div>
+   </section>
+   <section>
+   
+   </section>
+     
+    			
+{% endblock %}

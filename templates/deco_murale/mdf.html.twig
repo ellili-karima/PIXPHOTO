@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Décoration Murale{% endblock %}
+
+{% block body %}
+    {# <div class='row'>
+        <div class='col-6 m-auto text-center'>
+            <p>Tableau, Poster, Cadre... Créez ce que vous voulez avec les plus extraordinaires de vos photos.</p>
+        </div>
+        <div class='col-6 shadow text-center'>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/7gN0wljB8nU" title="YouTube video player"></iframe>
+            
+        </div>
+    </div> #}
+    {# <div class='row'>
+        <div class='col-12 text-center mt-3'>
+            <h1>Décoration Murale</h1>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-12 d-none d-md-block active'>
+            <img class='img-fluid w-100' width='100%' src="{{asset('images/decoMurale/deco.png')}}" alt="">
+            <div class='text-center hand'>
+                <img src="{{asset('images/decoMurale/tile.png')}}" alt="" id='cadre-bouge' class='w-100'>
+            </div>
+        </div>
+    </div> #}
+    <section class='bg-light shadow-sm'>
+        <div class='container text-center '>
+            <div class='row'>
+                <div class="col-4">
+                    <img src="{{asset('images/decoMurale/tile/photo-tiles.png')}}" alt="photo-tiles">
+                </div>
+                <div class="col-4 m-auto">
+                    <h3>Décoration murale autocollante</h3>
+                    <h4>sous forme des careaux</h4>
+                    <p><a href=""><button class='btn btn-danger'>Je crée</button></a></p>
+                </div>
+                <div class="col-4 m-auto">
+                    <img src="{{asset('images/decoMurale/tile/high-quality.png')}}"  id='photo-tiles' alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class='container mt-5'>
+            <div class='row text-center justify-content_around'>
+                <div class='col-6'>
+                    
+                    <figure class='mt-5'>
+                        <div class='d-flex justify-content-center'>
+                            <img src="{{asset('images/decoMurale/tile/tile-recto2.png')}}" alt="" class='me-2'>
+                            <img src="{{asset('images/decoMurale/tile/tile-recto3.png')}}" alt="">
+                        </div>
+                        <div>
+                            <img src="{{asset('images/decoMurale/tile/tile-recto.png')}}" alt="" class='front'>
+                            <div class='t-tiles'>
+                                <h3><strong>Support d'impression avant</strong></h3>
+                                <p class='ms-5 me-5'>Faites tourner les têtes avec des impressions qui sortent de vos carreaux photo.</p>
+                            </div>
+                            
+                        </div>
+                    </figure>
+                </div>
+                <div class='col-6'>
+                   
+                    <figure class='mt-5'>
+                        <div class='d-flex justify-content-center'>
+                            <img src="{{asset('images/decoMurale/tile/tile-verso2.png')}}" alt="" class='me-2'>
+                            <img src="{{asset('images/decoMurale/tile/tile-verso3.png')}}" alt="">
+                        </div>
+                        <div>
+                            <img src="{{asset('images/decoMurale/tile/tile-verso.png')}}" alt="" class='front'>
+                            <div class='t-tiles'>
+                                <h3><strong>Support d'impression arrière</strong></h3>
+                                <p class='ms-5 me-5'>Créez une vitrine époustouflante avec vos tirages incrustés dans les carreaux de photo.</p>
+                            </div>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id='bonde-tile-color'class='bg-light shadow-sm'>
+        <div class='container'>
+            <div class='row text-center justify-content_around'>
+                <div class='col-6 m-auto'>
+                    <h4>Trois couleurs sont disponibles</h4>
+                    <p><a href=""><button class='btn btn-danger'>Je crée</button></a></p>
+                </div>
+                <div class='col-6'>
+                    <div class='row'>
+                        <div class='col-3 text-start'>
+                            <h4>Noir</h4>
+                            <img src="{{asset('images/decoMurale/tile/photo-tiles-frame-black.jpg')}}" alt="tile-noir" class='tr-up'>
+                        </div>
+                        <div class='col-3 text-start'>
+                            <h4>Blanc</h4>
+                            <img src="{{asset('images/decoMurale/tile/photo-tiles-frame-white.jpg')}}" alt="tile-blanc" class='tr-up'>
+                        </div>
+                        <div class='col-3 text-start'>
+                            <h4>Latte</h4>
+                            <img src="{{asset('images/decoMurale/tile/photo-tiles-frame-latte.jpg')}}" alt="tile_latte" class='tr-up'>
+                        </div>
+                        <div class='col-3'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+     
+    			
+{% endblock %}

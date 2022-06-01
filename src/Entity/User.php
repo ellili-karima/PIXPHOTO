@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -29,8 +31,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Client::class, cascade: ['persist', 'remove'])]
-    private $client;
+    // #[ORM\OneToOne(mappedBy: 'user', targetEntity: Client::class, cascade: ['persist', 'remove'])]
+    // private $client;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Photo::class, orphanRemoval: true)]
+    private $photos;
+
+    public function __construct()
+    {
+        $this->photos = new ArrayCollection();
+    }
 
    
     public function getId(): ?int
@@ -117,35 +127,64 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // public function setClient(Client $client): self
+    // {
+    //     // set the owning side of the relation if necessary
+    //     if ($client->getUser() !== $this) {
+    //         $client->setUser($this);
+    //     }
+
+    //     $this->client = $client;
+
+    //     return $this;
+    // }
+   
+    
+    // public function getClient(): Client
+    // {
+    //     return $this->client;
+    // }
     
 
+    // //convertir le client pour pouvoir afficher le form client
+    // public function __toString() {
+    //     if(is_null($this->client)) {
+    //         return 'NULL';
+    //     }
+    //     return $this->client;
+    // }
 
-    public function setClient(Client $client): self
+    /**
+     * @return Collection<int, photo>
+     */
+    public function getPhotos(): Collection
     {
-        // set the owning side of the relation if necessary
-        if ($client->getUser() !== $this) {
-            $client->setUser($this);
+        return $this->photos;
+    }
+
+    public function addPhoto(photo $photo): self
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos[] = $photo;
+            $photo->setUser($this);
         }
 
-        $this->client = $client;
+        return $this;
+    }
+
+    public function removePhoto(photo $photo): self
+    {
+        if ($this->photos->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getUser() === $this) {
+                $photo->setUser(null);
+            }
+        }
 
         return $this;
     }
    
-    
-    public function getClient(): Client
-    {
-        return $this->client;
-    }
-    
 
-    //concertir 
-    public function __toString() {
-        if(is_null($this->client)) {
-            return 'NULL';
-        }
-        return $this->client;
-    }
-   
+
 
 }

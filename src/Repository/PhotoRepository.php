@@ -2,11 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Photo;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Photo|null find($id, $lockMode = null, $lockVersion = null)
@@ -45,6 +46,23 @@ class PhotoRepository extends ServiceEntityRepository
         }
     }
 
+
+     /**
+     * cette fonction permet de recuperer la liste des photos par user
+     *
+     * @param [type] $value
+     * @return void
+     */
+    public function getPhotosTirageUser(User $user)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->join('p.user', 'u')
+            ->andWhere('p.user = :val')
+            ->setParameter('val', $user->getId())
+            ;
+        return $query->getQuery()->getResult();
+    }
+    
     // /**
     //  * @return Photo[] Returns an array of Photo objects
     //  */

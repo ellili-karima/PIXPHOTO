@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre panier{% endblock %}
+
+{% block body %}
+    <section class='bg_light p-3'>
+        <h1>Votre panier</h1>
+    </section>
+    
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Service</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for element in dataPanier %}
+                <tr>
+                    <td>{{element.date|date('Y-m-d H:i:s')}}</td>
+                    <td>{{element.tiragePhoto.tirage.tirage}}</td>
+                    <td>{{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix) }} €</td>
+                    <td>{{element.quantite}}</td>
+                    <td>{{element.quantite * element.tiragePhoto.tirage.prix * (element.tiragePhoto.photos|length)}} €</td>
+                    <td>
+                        <a href="{{path('cart_add', {id: element.tiragePhoto.id})}}" class='btn btn-success'>
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </a>
+                        <a href="{{path('cart_remove', {id: element.tiragePhoto.id})}}" class='btn btn-warning'>
+                            <i class="fa-solid fa-cart-minus"></i>
+                        </a>
+                        <a href="{{path('cart_delete', {id: element.tiragePhoto.id})}}" class='btn btn-danger'>
+                            <i class="fa-solid fa-cart-xmark"></i>
+                        </a>
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan='6' class='text-center'>
+                        Votre panier est vide
+                    </td>
+                </tr>
+                
+            {% endfor %} 
+        </tbody>
+        <tfoot class="table-group-divider">
+            <tr>
+                <td colspan='4'>Total</td>
+                <td>{{ total }} €</td>
+                <td>
+                    <a href="{{path('delete_all')}}" class='btn btn-danger'>
+                        <i class="fa-solid fa-cart-circle-xmark"></i>
+                    </a>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class='text-end'><a href=""><button class='btn btn-primary'>Commander</button></a></div>
+    
+
+
+{% endblock %}

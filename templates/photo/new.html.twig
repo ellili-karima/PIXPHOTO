@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Photo{% endblock %}
+
+{% block body %}
+<div class='row'><h1 class='text-center'>choisissez vos photos</h1></div>
+<div class='row'>
+    <div class='col-4'></div>
+    <div class='col-4'>
+        {{ include('photo/_form.html.twig') }}
+    </div>
+    <div class='col-4'></div>
+</div>
+<div class='row'>
+    <div class='col-12'>
+        {% if photos %}
+            <hr>
+            
+                <div class='d-flex flex-wrap'>
+                {% for photo in photos %}
+                    <div class='m-2 position-relative'>
+                        <div>
+                        <img src="{{ asset('uploads/tirage/' ~ photo.photo) }}"  alt="tirage" id='photo_tirage' class='"card-img-top Regular shadow rounded'>
+                        </div>
+                        <div class='position-absolute top-0 end-0' id='delete'>
+                            {{ include('photo/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            <hr>
+            <div>
+                <a href="{{path('app_tirage_photo_index')}}">Continuer</a>
+            </div>
+        {% endif %}
+    </div>
+   
+</div> 
+   
+    
+{% endblock %}

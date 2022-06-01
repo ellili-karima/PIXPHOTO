@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\TirageRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TirageRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: TirageRepository::class)]
 class Tirage
@@ -16,17 +16,25 @@ class Tirage
     private $id;
 
     #[ORM\Column(type: 'string', length: 30)]
-    private $typeTirage;
+    private $tirage;
 
-    #[ORM\Column(type: 'string', length: 10)]
+    #[ORM\Column(type: 'string', length: 20)]
     private $format;
 
     #[ORM\Column(type: 'float')]
     private $prix;
 
     #[ORM\Column(type: 'integer')]
-    private $quantite_photo;
+    private $quantite;
 
+
+    #[ORM\OneToMany(mappedBy: 'tirage', targetEntity: TiragePhoto::class)]
+    private $tiragePhotos;
+
+    public function __construct()
+    {
+        $this->tiragePhotos = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -34,14 +42,14 @@ class Tirage
         return $this->id;
     }
 
-    public function getTypeTirage(): ?string
+    public function getTirage(): ?string
     {
-        return $this->typeTirage;
+        return $this->tirage;
     }
 
-    public function setTypeTirage(string $typeTirage): self
+    public function setTirage(string $tirage): self
     {
-        $this->typeTirage = $typeTirage;
+        $this->tirage = $tirage;
 
         return $this;
     }
@@ -72,18 +80,47 @@ class Tirage
 
     public function getQuantite(): ?int
     {
-        return $this->quantite_photo;
+        return $this->quantite;
     }
 
-    public function setQuantite(?int $quantite_photo): self
+    public function setQuantite(?int $quantite): self
     {
-        $this->quantite_photo = $quantite_photo;
+        $this->quantite = $quantite;
 
         return $this;
     }
-   
-   
 
 
+    /**
+     * @return Collection<int, TiragePhoto>
+     */
+    public function getTiragePhotos(): Collection
+    {
+        return $this->tiragePhotos;
+    }
+
+    public function addTiragePhoto(TiragePhoto $tiragePhoto): self
+    {
+        if (!$this->tiragePhotos->contains($tiragePhoto)) {
+            $this->tiragePhotos[] = $tiragePhoto;
+            $tiragePhoto->setTirage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTiragePhoto(TiragePhoto $tiragePhoto): self
+    {
+        if ($this->tiragePhotos->removeElement($tiragePhoto)) {
+            // set the owning side to null (unless already changed)
+            if ($tiragePhoto->getTirage() === $this) {
+                $tiragePhoto->setTirage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
 
 }

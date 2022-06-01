@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TiragePhoto index{% endblock %}
+
+{% block body %}
+
+<section id='formTirage'>
+    <div class='container'>
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center">Créez votre liste des tirages</h2>
+            </div>
+        </div>
+    
+        <div class='row'>
+            <div class='col-4 m-auto'>
+                {{ include('tirage_photo/_form.html.twig') }}
+            </div>
+            <div class='col-4 img-formulaire text-end'>
+                <img src="{{ asset('uploads/images/tirage/retro.jpg')}}"   alt="tirage" id=''>
+            </div>
+            <div class='col-4 img-formulaire text-start'>
+                <img src="{{ asset('uploads/images/tirage/large.jpg')}}"  alt="tirage" id=''>
+            </div>
+        </div>
+    </div>
+
+</section>
+    
+<section>
+    <div class="container">
+    {% if tirage_photos %}
+     <div class='row'>
+        <div class='col-12 mt-3'  id='tiragePhoto'>
+            <table class="table table-striped text-center">
+                <thead>
+                    <tr>
+                        <th>Photos</th>
+                        <th>Description</th>
+                        <th>Prix</th>
+                        <th>Actions</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for tirage_photo in tirage_photos %}
+                    <tr>
+                        {% if not tirage_photo.photos is empty %}
+                            {# <td id='test'>{{tirage_photo.id}}</td> #}
+                            <td id="{{tirage_photo.id}}">
+                                {% set firstphoto = tirage_photo.photos|first  %}
+                                    <img src="{{ asset('uploads/tirage/' ~ firstphoto.photo) }}" class="card-img-top rounded shadow-sm" id="photo_tirage" alt="tirage" >
+                                {% endif %} 
+                                
+                            </td>
+                            <td>
+                            {% if tirage != 'Tirage Identite' %}
+                                <a href="{{path('app_tirage_photo_show', {id: tirage_photo.id , 'tirage':tirage}) }}"><strong>( {{tirage_photo.photos|length}} ) photos</strong></a><br>
+                            {% endif %}
+                        {{ (tirage_photo.tirage.tirage)}}
+                        <br>
+                        {% if not tirage_photo.optionsTiragePhoto is empty %}
+                            Options: 
+                                {% for option in tirage_photo.optionsTiragePhoto %}
+                                    {{option.nom}} 
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        </td>
+                        
+                            {% if tirage_photo.photos|length >= 3 %}
+                                <td>{{((((tirage_photo.photos|length)*(tirage_photo.tirage.prix)))*15/100)|format_currency('EUR', {fraction_digit: 1}) }}</td>
+                            {% else %}
+                                <td>{{((tirage_photo.photos|length)*(tirage_photo.tirage.prix))|format_currency('EUR', {fraction_digit: 1}) }}</td>
+                            {% endif %}
+                        
+                        {# <td> 
+                            <table>
+                                <tr>
+                                    <td> #}
+                                        {# {% if  quantite is defined %}
+                                            {{quantite}}
+                                        {% else %} #}
+                                            {# {{ tirage_photo.quantiteTirage }} #}
+                                        {# {% endif %} #}
+                                    {# </td>
+                                    <td class="ps-3">
+                                        <a href=""><i class="fa-solid fa-caret-up"></i></a><br>
+                                        <a href=""><i class="fa-solid fa-caret-down"></a></i>
+                                    </td>
+                                </tr>
+                                
+                            </table>
+                        </td>#}
+                        <td>
+                            <a href="{{ path('app_tirage_photo_edit', {'id': tirage_photo.id , 'tirage': tirage}) }}" class='me-2'><button class='btn'><i class="fa-solid fa-pen-to-square"></i></button></a>
+                            {{ include('tirage_photo/_delete_form.html.twig') }}
+                        </td> 
+                        <td>  
+                            <a href="{{path('cart_add', {id: tirage_photo.id})}}" class='btn btn-success'><i class="fa-solid fa-cart-shopping"></i> Ajouter</a>
+                        </td>
+                    </tr>
+                    {# <tr>
+                        <td id="{{tirage_photo.id}}td" colspan='7' style='display:none;' >
+                            {% for photo in tirage_photo.photos %}
+                                <img src="{{ asset('uploads/tirage/' ~ photo.photo) }}" class="card-img-top rounded shadow-sm me-2" id="photo_tirage" alt="tirage" >
+                            {% endfor %}
+                        </td>
+                     #}
+                    {# <script> #}
+                        {# let id = document.getElementById('test').innerHTML;
+                        let photo = document.getElementById({{tirage_photo.id}});
+                        let photos = document.getElementById(id+'td');
+                        console.log(id);
+                        photo.addEventListener('click', function(){
+                                photos.style.display = 'block';
+                            
+                        }) #}
+                            {# {% if tirage_photo.id %} #}
+                            {# let photo = document.getElementById({{id}});
+                                let photos = document.getElementById(id+'td');
+                                photo.addEventListener('click', function(){
+                                photos.style.display = 'block';
+                            
+                        })
+                            {% endif %}
+                        
+                        
+                    </script> #}
+                    {# </tr> #}
+                {% endfor %}
+                
+                </tbody>
+            </table>
+                                    
+        </div>
+    </div>
+    {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TIRAGE PHOTO{% endblock %}
+
+{% block body %}
+    <section class='bg-light'>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-8'>
+                    <img src="{{ asset('images/tirage/tirage.png') }}" class="card-img-top" alt="tirage">
+                </div>
+                <div class='col-4 m-auto'>
+                    <h2>Tirage photo Premium</h2>
+                    <ul>
+                        <li>Tirages classiques et originaux</li>
+                        <li>Papier premium brillant FUJIFILM</li>
+                        <li>Format flexible qui s'adapte au rapport de votre fichier</li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class='container'>
+            <div class='row'>
+                {# <h4 class='text-center mb-5'> Votre téléphone est plein à craquer ? Faites de la place, imprimez vos photos de vacances – là au moins, vous en profiterez vraiment.</h4> #}
+                <div class='col-2'></div>
+                <div class='col-4'>
+                    <div class="card border-0" style="width: 18rem;">
+                        <img src="{{ asset('images/tirage/tirage1.jpg') }}" class="card-img-top zoom" alt="tirage">
+                        <div class="card-body">
+                            <h5 class="card-title">Tirage standard</h5>
+                            <p class="text-muted fs-6">À partir de {{PrixMinTirageStandard}} €</p>
+                            <p class="card-text"><ul>
+                                    <li>Formats disponibles : 9 x 13 cm, 10 x 13 cm, 10 x 15 cm, 11 x 15 cm</li>
+                                    <li>Finition mate ou brillante avec ou sans marge</li>
+                                    <li>La jolie simplicité du format standard</li>
+                                    
+                                </ul></p>
+                            <p class='text-center'><a href="{{path('app_tirage_photo_index', {'tirage':'Tirage Photo'})}}" class=" btn btn-danger lien">Je creé</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-4'>
+                    <div class="card border-0" style="width: 18rem;">
+                        <img src="{{ asset('images/tirage/identite.jpg') }}" class="card-img-top" alt="Identité">
+                        <div class="card-body">
+                            <h5 class="card-title">Photo d'identité</h5>
+                            <p class="text-muted fs-6">À partir de {{PrixMinTirageIdentite}} €</p>
+                            <p class="card-text"><ul>
+                                    <li>Planche de quantre photos d'identité</li>
+                                    <li>Planche de huit photos d'identité</li>
+                                    <li>Planche de douze photos d'identités</li>
+                                </ul></p>
+                            <p class='text-center'><a href="{{path('app_tirage_photo_index', {'tirage':'Tirage Identite'})}}"  class="btn btn-danger lien">Je creé</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-2'>    
+                    {# <div class="card border-0" style="width: 18rem;">
+                        <img src="{{ asset('uploads/images/tirage/grande_quantite.jpg') }}" class="card-img-top" alt="grande-quantité" >
+                        <div class="card-body">
+                            <h5 class="card-title">Tirage en quantité</h5>
+                            <p class="card-text"> Économisez en commandant en grande quantité</p>
+                            <p class='text-center'><a href="{{path('app_tirage_photo_index', {'tirage':'Tirage Identite'})}}"  class="btn btn-danger lien">Je creé</a></p>
+                        </div>
+                    </div>    #}
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <section class='bg-light'>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-4'></div>
+                <div class='col-8'></div>
+            </div>
+        </div>
+    
+    </section>
+    
+    <div class='row'>
+        {# {% include "base/carousel.html.twig" %} #}
+    </div>
+    {# <script>
+        let lien = document.querySelector(".lien");
+        let card = document.querySelector(".card");
+        card.addEventListener("mouseover", test,false);
+        function test() {
+            lien.style.display = "inline-block";
+        }
+        card.addEventListener("mouseout", test2,true);
+        function test2() {
+            lien.style.display = "none";
+        }
+        console.log(lien)
+    </script> #}
+    	
+{% endblock %}

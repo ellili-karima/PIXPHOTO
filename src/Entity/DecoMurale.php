@@ -110,5 +110,4 @@ class DecoMurale
         return $this;
     }
 
-    
 }

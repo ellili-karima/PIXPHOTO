@@ -1,0 +1,40 @@
+{{ form_start(form) }}
+    <p>
+        {{ form_row(form.photo)}}
+        {# <div id='photo'></div> #}
+        {# <script>
+                let photo = document.getElementById('photo');
+                let photos = document.getElementById('tirage_photo_photo');
+                
+                console.log(photos.value)
+                photos.addEventListener('click', function(){
+                    photos.addEventListener("change", () => {
+                        photo.innerHTML = photos.value;
+                    })
+                })
+            </script> #}
+    </p>
+    {{ form_row(form.tirage)}}
+    {% if (tirage != 'Tirage Identite')%}
+        {{ form_row(form.options)}}
+    {% endif %}
+    
+    <button class="btn btn-outline-danger">{{ button_label|default('Je crée')}}</button>
+
+    <div id='prix' class='text-end'></div>
+        <script>
+            let prix = document.getElementById('prix');
+            let tirages = document.getElementById('tirage_photo_tirage');
+            console.log(tirages)
+            tirages.addEventListener('click', function(){
+                tirages.addEventListener("change", () => {
+                    if({{idtirage[1]['id']}} == tirages.value){
+                        prix.innerHTML = {{idtirage[1]['prix']}};
+                        
+                    
+                    }})
+            
+            })
+
+        </script>
+{{ form_end(form) }}

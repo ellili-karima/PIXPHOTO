@@ -1,71 +1,241 @@
-<header>
-	<div class="container-fluid">
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="{# {{path('acceuil')}} #}"><img id='logo' src="/images/logo/pixphoto.png" alt="logo"></a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<header class='mb-0'>
+
+	<div class="container-fluid m-0">
+		<div id='haut_nav'></div>
+		<nav class="navbar navbar-expand-lg bg-light d-flex flex-nowrap">
+			<a class="navbar-brand p-2 w-100" href="{{path('app_home')}}"><img id='logo' src="/images/logo/pixphoto.png" alt="logo"></a>
+			<ul class="navbar-nav d-flex">
+				{% if app.user %}
+					<li class="nav-item dropdown">
+						<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fa-solid fa-user"></i>
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<li><a class="dropdown-item" href="#">Mon profile</a></li>
+							<li><a class="dropdown-item" href="#">Mes commandes</a></li>
+							<li><hr class="dropdown-divider"></li>
+							<li><a class="dropdown-item" href="{{path('app_logout')}}">Déconnexion</a></li>
+						</ul>
+					</li>
+					
+				{% else %}
+					<li class="nav-item me-2">
+						<a class="nav-link" href="{{path('app_login')}}">Connexion</a>
+					</li>
+				{% endif %}
+				<li class="nav-item me-3">
+					<a class="nav-link" href="{{path('app_cart')}}">
+						<i class="fa-solid fa-cart-shopping"></i>
+					</a>
+				</li>
+			</ul>
+		</nav>
+
+		
+		<nav id='second_nav' class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
+			<div id="navbarContent" class="collapse navbar-collapse">
+				<ul class="navbar-nav mx-auto">
 
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Tirage photo
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="#">Tirage Standard</a></li>
-							<li><a class="dropdown-item" href="#">Tirage Identité</a></li>
-							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="#">Tirage Grande Quantité</a></li>	
-						</ul>
+					<li class="nav-item dropdown megamenu">
+						<a id="megamneu" href="" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link font-weight-bold">Tirage Photo</a>
+						<div aria-labelledby="megamneu" class="dropdown-menu border-0 p-0 m-0" style='width:500px;'>
+							<div class="container">
+								<div class="row bg-white rounded-0 m-0 shadow-sm">
+									<div class="col-lg-7 col-xl-8">
+										<div class="p-4">
+											<div class="row">
+												<div class="col-lg-6 mb-4">
+													<h6 class="font-weight-bold">Tirage Standard</h6>
+													<ul class="list-unstyled">
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0">Tirage 10x15</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">About</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Help</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Account</a>
+														</li>
+													</ul>
+												</div>
+												<div class="col-lg-6 mb-4">
+													<h6 class="font-weight-bold text-uppercase">Tirage Identite</h6>
+													<ul class="list-unstyled">
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Identité 4</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Identité 8</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Identité 12</a>
+														</li>
+														
+													</ul>
+												</div>
+												<div class="col-lg-6 mb-4">
+													<h6 class="font-weight-bold text-uppercase">Tirage en quantite</h6>
+													<ul class="list-unstyled">
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Home</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">About</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Help</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Account</a>
+														</li>
+													</ul>
+												</div>
+												<div class="col-lg-6 mb-4">
+													<h6 class="font-weight-bold text-uppercase">Tirage carré</h6>
+													<ul class="list-unstyled">
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Home</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">About</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Help</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Account</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-5 col-xl-4 px-0 d-none d-lg-block" style="background: center center url({{asset('uploads/images/tirage/img-select-country.jpg')}})no-repeat; background-size: cover;"></div>
+								</div>
+							</div>
+						</div>
 					</li>
 
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Agrandissement
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="#">Papier photo</a></li>
-							<li><a class="dropdown-item" href="#">Toile</a></li>
-							<li><a class="dropdown-item" href="#">Vinyle</a></li>
-							<li><a class="dropdown-item" href="#">Papier peint</a></li>
-							<li><a class="dropdown-item" href="#">Bach</a></li>	
-						</ul>
+					<li class="nav-item dropdown megamenu">
+						<a id="megamneu" href="" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle font-weight-bold text-uppercase">Décoration</a>
+						<div aria-labelledby="megamneu" class="dropdown-menu border-0 p-0 m-0" style='width:500px;'>
+							<div class="container">
+								<div class="row bg-white rounded-0 m-0 shadow-sm">
+									<div class="col-lg-7 col-xl-8">
+										<div class="p-4">
+											<div class="row">
+												<div class="col-lg-6 mb-4">
+													<h6 class="font-weight-bold text-uppercase">Tirage Standard</h6>
+													<ul class="list-unstyled">
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0">Home</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">About</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Help</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Account</a>
+														</li>
+													</ul>
+												</div>
+												<div class="col-lg-6 mb-4">
+													<h6 class="font-weight-bold text-uppercase">Tirage Identite</h6>
+													<ul class="list-unstyled">
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Home</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">About</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Help</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Account</a>
+														</li>
+													</ul>
+												</div>
+												<div class="col-lg-6 mb-4">
+													<h6 class="font-weight-bold text-uppercase">Heading three</h6>
+													<ul class="list-unstyled">
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Home</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">About</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Help</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Account</a>
+														</li>
+													</ul>
+												</div>
+												<div class="col-lg-6 mb-4">
+													<h6 class="font-weight-bold text-uppercase">Heading four</h6>
+													<ul class="list-unstyled">
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Home</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">About</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Help</a>
+														</li>
+														<li class="nav-item">
+															<a href="" class="nav-link text-small pb-0 ">Account</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-5 col-xl-4 px-0 d-none d-lg-block" style="background: center center url({{asset('uploads/images/tirage/img-select-country.jpg')}})no-repeat; background-size: cover;"></div>
+								</div>
+							</div>
+						</div>
 					</li>
-
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Déco murale
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="#">Photo dans cadre photo</a></li>
-							<li><a class="dropdown-item" href="#">Photo sur bois mdf</a></li>	
-							<li><a class="dropdown-item" href="#">Photo sur toile</a></li>
-						</ul>
+					<li class="nav-item">
+						<a href="" class="nav-link font-weight-bold text-uppercase">About</a>
 					</li>
-
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Cadeaux personalisés
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="#">Textile</a></li>
-							<li><a class="dropdown-item" href="#">Mugs personalisés</a></li>
-							<li><a class="dropdown-item" href="#">Tasse magique</a></li>
-						</ul>
+					<li class="nav-item">
+						<a href="" class="nav-link font-weight-bold text-uppercase">Services</a>
 					</li>
-					{% if app.user %}
-						<li class="nav-item">
-							<a class="nav-link" href="{{path('app_logout')}}">Déconnexion</a>
-						</li>
-						{% else %}
-						<li class="nav-item">
-							<a class="nav-link" href="{{path('app_login')}}">Connexion</a>
-						</li>
-					{% endif %}
+					<li class="nav-item">
+						<a href="" class="nav-link font-weight-bold text-uppercase">Contact</a>
+					</li>
 				</ul>
 			</div>
-		</div>
-	</nav>
+		</nav>
+	
+
+	</div>
+	<div
+		class="my-3">
+		{# On récupère le type et les messages de chaque message flash #}
+		{% for type, messages in app.flashes %}
+			{# On génère l'alerte #}
+			<div
+				class="alert alert-{{type}}  alert-dismissible fade show" role="alert">
+				{# On parcourt les messages pour les afficher #}
+				{% for message in messages %}
+					{{message}}
+				{% endfor %}
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		{% endfor %}
+	</div>
 </header>
