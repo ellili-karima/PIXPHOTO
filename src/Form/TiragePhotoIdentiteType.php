@@ -49,12 +49,12 @@ class TiragePhotoIdentiteType extends AbstractType
                     'class'=> Tirage::class,
                     'multiple'=>false,
                     'placeholder' => 'choisissez le format',
-                    'choice_label'=>'tirage',
+                    'choice_label'=>'format',
                     'label' => ' ',
                     'query_builder' =>function(EntityRepository $er){
                         $tirage='Tirage Identite';
                         $qb = $er->createQueryBuilder('t');
-                            $qb->where($qb->expr()->like('t.tirage', $qb->expr()->literal("$tirage%")))
+                            $qb->where($qb->expr()->like('t.tirage', $qb->expr()->literal("$tirage")))
                         ;
                         return $qb;
                     }

@@ -40,7 +40,7 @@ class UpdateTiragePhotoIdentiteType extends AbstractType
                     'class'=> Tirage::class,
                     'multiple'=>false,
                     'placeholder' => 'choisissez le format',
-                    'choice_label'=>'tirage',
+                    'choice_label'=>'format',
                     'label' => ' ',
                     'query_builder' =>function(EntityRepository $er){
                         $tirage='Tirage Identite';

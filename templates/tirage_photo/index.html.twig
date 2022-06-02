@@ -17,10 +17,10 @@
                 {{ include('tirage_photo/_form.html.twig') }}
             </div>
             <div class='col-4 img-formulaire text-end'>
-                <img src="{{ asset('uploads/images/tirage/retro.jpg')}}"   alt="tirage" id=''>
+                <img src="{{ asset('images/tirage/retro.jpg')}}"   alt="tirage" id=''>
             </div>
             <div class='col-4 img-formulaire text-start'>
-                <img src="{{ asset('uploads/images/tirage/large.jpg')}}"  alt="tirage" id=''>
+                <img src="{{ asset('images/tirage/large.jpg')}}"  alt="tirage" id=''>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
                             {% if tirage != 'Tirage Identite' %}
                                 <a href="{{path('app_tirage_photo_show', {id: tirage_photo.id , 'tirage':tirage}) }}"><strong>( {{tirage_photo.photos|length}} ) photos</strong></a><br>
                             {% endif %}
-                        {{ (tirage_photo.tirage.tirage)}}
+                        {{ (tirage_photo.tirage.tirage)}} {{ (tirage_photo.tirage.format)}}
                         <br>
                         {% if not tirage_photo.optionsTiragePhoto is empty %}
                             Options: 
@@ -68,36 +68,29 @@
                         {% endif %}
                         </td>
                         
-                            {% if tirage_photo.photos|length >= 3 %}
-                                <td>{{((((tirage_photo.photos|length)*(tirage_photo.tirage.prix)))*15/100)|format_currency('EUR', {fraction_digit: 1}) }}</td>
+                            {% if tirage == 'Tirage grande quantite' %}
+                                {% if tirage_photo.photos|length < 200 %}
+                                    <td>{{(((tirage_photo.photos|length)*(tirage_photo.tirage.prix)))|format_currency('EUR', {fraction_digit: 1}) }}</td>
+                                {% elseif tirage_photo.photos|length >= 200 and tirage_photo.photos|length < 300 %}
+                                    {# prix - 15% #}
+                                    <td>{{(((tirage_photo.photos|length)*(tirage_photo.tirage.prix))-(((tirage_photo.photos|length)*(tirage_photo.tirage.prix))*15/100))|format_currency('EUR', {fraction_digit: 1}) }}</td>
+                                {% elseif tirage_photo.photos|length >= 300 and tirage_photo.photos|length < 500  %}
+                                    {# prix - 20% #}
+                                    <td>{{(((tirage_photo.photos|length)*(tirage_photo.tirage.prix))-(((tirage_photo.photos|length)*(tirage_photo.tirage.prix))*20/100))|format_currency('EUR', {fraction_digit: 1}) }}</td>
+                                {% elseif tirage_photo.photos|length >= 500 %}
+                                    {# prix - 25% #}
+                                    <td>{{(((tirage_photo.photos|length)*(tirage_photo.tirage.prix))-(((tirage_photo.photos|length)*(tirage_photo.tirage.prix))*25/100))|format_currency('EUR', {fraction_digit: 1}) }}</td>
+                                {% endif %}    
                             {% else %}
                                 <td>{{((tirage_photo.photos|length)*(tirage_photo.tirage.prix))|format_currency('EUR', {fraction_digit: 1}) }}</td>
                             {% endif %}
                         
-                        {# <td> 
-                            <table>
-                                <tr>
-                                    <td> #}
-                                        {# {% if  quantite is defined %}
-                                            {{quantite}}
-                                        {% else %} #}
-                                            {# {{ tirage_photo.quantiteTirage }} #}
-                                        {# {% endif %} #}
-                                    {# </td>
-                                    <td class="ps-3">
-                                        <a href=""><i class="fa-solid fa-caret-up"></i></a><br>
-                                        <a href=""><i class="fa-solid fa-caret-down"></a></i>
-                                    </td>
-                                </tr>
-                                
-                            </table>
-                        </td>#}
                         <td>
                             <a href="{{ path('app_tirage_photo_edit', {'id': tirage_photo.id , 'tirage': tirage}) }}" class='me-2'><button class='btn'><i class="fa-solid fa-pen-to-square"></i></button></a>
                             {{ include('tirage_photo/_delete_form.html.twig') }}
                         </td> 
                         <td>  
-                            <a href="{{path('cart_add', {id: tirage_photo.id})}}" class='btn btn-success'><i class="fa-solid fa-cart-shopping"></i> Ajouter</a>
+                            <a href="{{path('cart_add', {'id': tirage_photo.id , 'tirage' : tirage})}}" class='btn btn-success'><i class="fa-solid fa-cart-shopping"></i> Ajouter</a>
                         </td>
                     </tr>
                     {# <tr>

@@ -9,15 +9,17 @@ use App\Form\UpdateTiragePhotoType;
 use App\Repository\PhotoRepository;
 use App\Repository\TirageRepository;
 use App\Form\TiragePhotoIdentiteType;
+use App\Form\TiragePhotoQuantiteType;
 use App\Repository\TiragePhotoRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\UpdateTiragePhotoIdentiteType;
+use App\Form\UpdateTiragePhotoQuantiteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Validator\Constraints\Length;
 
 #[Route('/tirage/photo')]
 class TiragePhotoController extends AbstractController
@@ -47,7 +49,7 @@ class TiragePhotoController extends AbstractController
                 foreach ($photos as $photo) {
                     //on génére un nouveau nom du fichier photo.
                     $fichier = md5(uniqid()) . '.' . $photo->guessExtension();
-                    //on copie le fichier dans le dossier public/img/biens
+                    //on copie le fichier dans le dossier tiragePhoto
                     $photo->move(
                         $this->getParameter('tiragePhoto_dir'),
                         $fichier
@@ -61,7 +63,7 @@ class TiragePhotoController extends AbstractController
                     $tiragePhoto->addPhoto($img);
                 }
                 $tiragePhoto->setDateCreation(new \DateTime());
-                //on recuper le checkbox des options
+                //on recupere le checkbox des options
                 $options = $form->get('options')->getData();
                 foreach ($options as $option) {
                     $tiragePhoto->addOptionsTiragePhoto($option);
@@ -82,7 +84,7 @@ class TiragePhotoController extends AbstractController
                 //on boucle sur les photos
                     //on génére un nouveau nom du fichier photo.
                     $fichier = md5(uniqid()) . '.' . $photo->guessExtension();
-                    //on copie le fichier dans le dossier public/img/biens
+                    //on copie le fichier dans le dossier tiragePhoto
                     $photo->move(
                         $this->getParameter('tiragePhoto_dir'),
                         $fichier
@@ -99,7 +101,41 @@ class TiragePhotoController extends AbstractController
                 $tiragePhotoRepository->add($tiragePhoto);
                 return $this->redirectToRoute('app_tirage_photo_index', ['tirage' => $tirage], Response::HTTP_SEE_OTHER);
             }
-        };
+        }elseif ($tirage == 'Tirage grande quantite'){
+            $form = $this->createForm(TiragePhotoQuantiteType::class, $tiragePhoto);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                // on récupere les photos transmises
+                $photos = $form->get('photo')->getData();
+
+                //on boucle sur les photos
+                foreach ($photos as $photo) {
+                    //on génére un nouveau nom du fichier photo.
+                    $fichier = md5(uniqid()) . '.' . $photo->guessExtension();
+                    //on copie le fichier dans le dossier tiragePhoto
+                    $photo->move(
+                        $this->getParameter('tiragePhoto_dir'),
+                        $fichier
+                    );
+
+                    // on stocke l'image dans la base de données (son nom)
+                    $img = new Photo();
+                    $img->setPhoto($fichier);
+                    // on insere l'ulisateur connecté à la photo
+                    $img->setUser($user);
+                    $tiragePhoto->addPhoto($img);
+                }
+                $tiragePhoto->setDateCreation(new \DateTime());
+                //on recuper le checkbox des options
+                $options = $form->get('options')->getData();
+                foreach ($options as $option) {
+                    $tiragePhoto->addOptionsTiragePhoto($option);
+                }
+
+                $tiragePhotoRepository->add($tiragePhoto);
+                return $this->redirectToRoute('app_tirage_photo_index', ['tirage' => $tirage,], Response::HTTP_SEE_OTHER);
+        }}
         return $this->render('tirage_photo/index.html.twig', [
             'tirage_photos' =>  $tirage_photo,
             'form' => $form->createView(),
@@ -113,6 +149,8 @@ class TiragePhotoController extends AbstractController
 
         ]);
     }
+
+    
 
     #[Route('/{id}', name: 'app_tirage_photo_show', methods: ['GET'])]
     public function show(TiragePhoto $tiragePhoto, Request $request): Response
@@ -128,7 +166,6 @@ class TiragePhotoController extends AbstractController
     #[Route('/{id}/edit', name: 'app_tirage_photo_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, TiragePhoto $tiragePhoto, TiragePhotoRepository $tiragePhotoRepository, UserInterface $user): Response
     {
-
         //je recupere la valeur de type de l url
         (string) $tirage = $request->get('tirage');
         //je recupere la liste des tiragePhoto de l'utilisateur connecté par type de tirage
@@ -197,7 +234,7 @@ class TiragePhotoController extends AbstractController
                     foreach ($photosTirage as $photoTirage) {
                         //on recupere le nom de la photo de la base de donées
                         $nom = $photoTirage->getPhoto();
-                        //on supprime la photo du dossier img
+                        //on supprime la photo du dossier tiragePhoto
                         unlink($this->getParameter('tiragePhoto_dir') . '/' . $nom);
                         //on supprime la photo de la base de donnée
                         $tiragePhotoRepository->find($id)->removePhoto($photoTirage);
@@ -217,8 +254,40 @@ class TiragePhotoController extends AbstractController
                 $tiragePhotoRepository->add($tiragePhoto);
                 return $this->redirectToRoute('app_tirage_photo_index', ['tirage' => $tirage], Response::HTTP_SEE_OTHER);
             }
-        }
+        }elseif ($tirage == 'Tirage grande quantite') {
 
+            $formEdit = $this->createForm(UpdateTiragePhotoQuantiteType::class, $tiragePhoto);
+            $formEdit->handleRequest($request);
+            if ($formEdit->isSubmitted() && $formEdit->isValid()) {
+                $photos = $formEdit->get('photo')->getData();
+                //on boucle sur les photos
+                foreach ($photos as $photo) {
+                    //on genere un nouveau nom du fichier image.
+                    $fichier = md5(uniqid()) . '.' . $photo->guessExtension();
+
+                    //on copie le fichier dans le dossier tiragePhoto
+                    $photo->move(
+                        $this->getParameter('tiragePhoto_dir'),
+                        $fichier
+                    );
+
+                    // on stocke l'image dans la base de données (son nom)
+                    $img = new Photo();
+                    $img->setPhoto($fichier);
+                    $img->setUser($user);
+                    $tiragePhoto->addPhoto($img);
+                }
+                
+                //on recuper le checkbox des options
+                $options = $formEdit->get('options')->getData();
+                foreach ($options as $option) {
+                    $tiragePhoto->addOptionsTiragePhoto($option);
+                }
+
+                $tiragePhotoRepository->add($tiragePhoto);
+                return $this->redirectToRoute('app_tirage_photo_index', ['tirage' => $tirage], Response::HTTP_SEE_OTHER);
+            }
+        }
         return $this->renderForm('tirage_photo/edit.html.twig', [
             'tirage_photo' => $tiragePhoto,
             'form' => $formEdit,
@@ -261,7 +330,7 @@ class TiragePhotoController extends AbstractController
 
             //on récupère le nom de la photo
             $nom = $photo->getPhoto();
-            //on supprime la photo du dossier img
+            //on supprime la photo du dossier tiragePhoto
             unlink($this->getParameter('tiragePhoto_dir') . '/' . $nom);
 
             //on supprime la photo de la base
@@ -276,42 +345,4 @@ class TiragePhotoController extends AbstractController
         }
     }
 }
-//  //je recupere le tiragePhoto correspond à la photo
-//  $tiragePhoto = $photo->getTiragePhoto();
-//  //je recupere l Id du tiragePhoto
-//  $id = $tiragePhoto->getId();
-//  //je recupere les photos du tiragePhoto
-//  $photos = $tiragePhoto->getPhotos();
-//  //je stocke le nbre les photos dans un variable
-//  $nbrePhotos = COUNT($photos);
 
-//  $tirageRep = $tiragePhoto->getTirage();
-//  $idTirage = $tirageRep->getId();
-// if ($this->isCsrfTokenValid('delete' . $photo->getId(), $request->request->get('_token'))) {
-   
-//     //si le nbre des photos du tiragePhoto = 1 alors on retire le tiragePhoto de la base de donnée
-//     if($nbrePhotos == 1){
-        
-//         $tirageRepository->find($idTirage)->removeTiragePhoto($tiragePhoto);
-//         //on récupère le nom de la photo
-//         $nom = $photo->getPhoto();
-//         //on supprime la photo du dossier img
-//         unlink($this->getParameter('tiragePhoto_dir') . '/' . $nom);
-
-//         //on supprime la photo de la base
-//         $em = $manager->getManager();
-//         $em->remove($photo);
-//         $em->flush();
-//         $this->addFlash("success", "Le tirage a été supprimé");
-//     }else{
-//         //on récupère le nom de la photo
-//         $nom = $photo->getPhoto();
-//         //on supprime la photo du dossier img
-//         unlink($this->getParameter('tiragePhoto_dir') . '/' . $nom);
-
-//         //on supprime la photo de la base
-//         $em = $manager->getManager();
-//         $em->remove($photo);
-//         $em->flush();
-//         $this->addFlash("success", "La photo a été supprimé avec succès");
-//     }

@@ -23,9 +23,36 @@
                 <tr>
                     <td>{{element.date|date('Y-m-d H:i:s')}}</td>
                     <td>{{element.tiragePhoto.tirage.tirage}}</td>
-                    <td>{{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix) }} €</td>
+                    <td>
+                    {% if element.tiragePhoto.tirage.tirage == 'Tirage grande quantite' %}
+                        {% if (element.tiragePhoto.photos|length) < 200 %}
+                            {{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix) }} €
+                        {% elseif (element.tiragePhoto.photos|length) >= 200 and (element.tiragePhoto.photos|length) < 300 %}
+                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*15/100))*(element.tiragePhoto.photos|length) }} €
+                        {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
+                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*20/100))*(element.tiragePhoto.photos|length) }} €
+                        {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
+                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*25/100))*(element.tiragePhoto.photos|length) }} €     
+                        {% endif %}
+                    {% else %}
+                        {{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix) }} €
+                    {% endif %}   
+                        </td>
                     <td>{{element.quantite}}</td>
-                    <td>{{element.quantite * element.tiragePhoto.tirage.prix * (element.tiragePhoto.photos|length)}} €</td>
+                    <td>
+                        {% if element.tiragePhoto.tirage.tirage == 'Tirage grande quantite' %}
+                            {% if (element.tiragePhoto.photos|length) < 200 %}
+                                {{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix)*(element.quantite) }} €
+                            {% elseif (element.tiragePhoto.photos|length) >= 200 and (element.tiragePhoto.photos|length) < 300 %}
+                                {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*15/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €
+                            {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
+                                {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*20/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €
+                            {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
+                                {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*25/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €     
+                            {% endif %}
+                        {% else %}
+                            {{element.quantite * element.tiragePhoto.tirage.prix * (element.tiragePhoto.photos|length)}} €</td>
+                        {% endif %}  
                     <td>
                         <a href="{{path('cart_add', {id: element.tiragePhoto.id})}}" class='btn btn-success'>
                             <i class="fa-solid fa-cart-plus"></i>

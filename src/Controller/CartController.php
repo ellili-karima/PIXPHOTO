@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Photo;
 use App\Entity\TiragePhoto;
 use App\Repository\TiragePhotoRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -26,7 +27,19 @@ class CartController extends AbstractController
             $tiragePhoto = $tiragePhotoRepository->find($id);
             $photos = $tiragePhoto->getPhotos();
             $nbrePhotos = COUNT($photos);
+            if ($tiragePhoto->getTirage()->getTirage() == 'Tirage grande quantite') {
+                if ($nbrePhotos < 200) {
+                    $prix = $tiragePhoto->getTirage()->getPrix() * $nbrePhotos;
+                }elseif($nbrePhotos >= 200 && $nbrePhotos < 300){
+                    $prix = (($tiragePhoto->getTirage()->getPrix())-((($tiragePhoto->getTirage()->getPrix())*15)/100) )* $nbrePhotos;
+                }elseif($nbrePhotos >= 300 && $nbrePhotos < 500){
+                    $prix = (($tiragePhoto->getTirage()->getPrix())-((($tiragePhoto->getTirage()->getPrix())*20)/100) )* $nbrePhotos;
+                }elseif($nbrePhotos >= 300 && $nbrePhotos < 500){
+                    (($tiragePhoto->getTirage()->getPrix())-((($tiragePhoto->getTirage()->getPrix())*25)/100) )* $nbrePhotos;
+                }  
+            }else{
             $prix = $tiragePhoto->getTirage()->getPrix() * $nbrePhotos;
+            }
             $dataPanier[] = [
                 'tiragePhoto' => $tiragePhoto,
                 'quantite' => $quantite,
@@ -42,8 +55,9 @@ class CartController extends AbstractController
     }
 
     #[Route('/add/{id}', name: 'cart_add')]
-    public function add(TiragePhoto $tiragePhoto, SessionInterface $session)
+    public function add(TiragePhoto $tiragePhoto, SessionInterface $session, Request $request)
     {
+        $tirage = $request->get('tirage');
        //on récupère le panier actiel
         $panier = $session->get("panier" ,[]);
         $id = $tiragePhoto->getId();
@@ -55,7 +69,7 @@ class CartController extends AbstractController
         //on sauvgarde dans la session
         $session->set("panier", $panier);
         //dd($session);
-       return $this->redirectToRoute('app_cart');
+       return $this->redirectToRoute('app_cart', ['tirage' => $tirage], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/remove/{id}', name: 'cart_remove')]

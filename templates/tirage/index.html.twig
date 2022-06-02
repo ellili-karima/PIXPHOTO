@@ -14,9 +14,10 @@
                     <ul>
                         <li>Tirages classiques et originaux</li>
                         <li>Papier premium brillant FUJIFILM</li>
+                        <li>La jolie simplicité du format standard</li>
                         <li>Format flexible qui s'adapte au rapport de votre fichier</li>
-
                     </ul>
+                    <p class='text-center'><a href="" class=" btn btn-outline-danger lien">J'en profite</a></p>
                 </div>
             </div>
         </div>
@@ -25,48 +26,46 @@
         <div class='container'>
             <div class='row'>
                 {# <h4 class='text-center mb-5'> Votre téléphone est plein à craquer ? Faites de la place, imprimez vos photos de vacances – là au moins, vous en profiterez vraiment.</h4> #}
-                <div class='col-2'></div>
+                
                 <div class='col-4'>
-                    <div class="card border-0" style="width: 18rem;">
+                    <div class="card border-0 shadow" style="width: 18rem;">
                         <img src="{{ asset('images/tirage/tirage1.jpg') }}" class="card-img-top zoom" alt="tirage">
                         <div class="card-body">
                             <h5 class="card-title">Tirage standard</h5>
                             <p class="text-muted fs-6">À partir de {{PrixMinTirageStandard}} €</p>
-                            <p class="card-text"><ul>
-                                    <li>Formats disponibles : 9 x 13 cm, 10 x 13 cm, 10 x 15 cm, 11 x 15 cm</li>
-                                    <li>Finition mate ou brillante avec ou sans marge</li>
-                                    <li>La jolie simplicité du format standard</li>
-                                    
-                                </ul></p>
+                            <p class="card-text">
+                                <ul>
+                                    <li>Formats disponibles : 10x15 , 13x18 , 15x21 et 18x24 cm</li>
+                                </ul>
+                            </p>
                             <p class='text-center'><a href="{{path('app_tirage_photo_index', {'tirage':'Tirage Photo'})}}" class=" btn btn-danger lien">Je creé</a></p>
                         </div>
                     </div>
                 </div>
+                <div class='col-4'>    
+                    <div class="card border-0 shadow" style="width: 18rem;">
+                        <img src="{{ asset('images/tirage/grande_quantite.jpg') }}" class="card-img-top" alt="grande-quantité" >
+                        <div class="card-body">
+                            <h5 class="card-title">Tirage en quantité</h5>
+                            <p class="card-text">Faites grande impression chez PIXPHOTO et bénéficiez pour vos tirages photo en grande quantité de jusqu'à 25% offert.</p>
+                            <p class='text-center'><a href="#"  class="btn btn-outline-danger lien">J'en profite</a></p>
+                        </div>
+                    </div>   
+                </div>
                 <div class='col-4'>
-                    <div class="card border-0" style="width: 18rem;">
+                    <div class="card border-0 shadow" style="width: 18rem;">
                         <img src="{{ asset('images/tirage/identite.jpg') }}" class="card-img-top" alt="Identité">
                         <div class="card-body">
                             <h5 class="card-title">Photo d'identité</h5>
                             <p class="text-muted fs-6">À partir de {{PrixMinTirageIdentite}} €</p>
                             <p class="card-text"><ul>
-                                    <li>Planche de quantre photos d'identité</li>
-                                    <li>Planche de huit photos d'identité</li>
-                                    <li>Planche de douze photos d'identités</li>
+                                    <li>Planche de 4 , 8 ou 12 photos d'identité</li>
                                 </ul></p>
                             <p class='text-center'><a href="{{path('app_tirage_photo_index', {'tirage':'Tirage Identite'})}}"  class="btn btn-danger lien">Je creé</a></p>
                         </div>
                     </div>
                 </div>
-                <div class='col-2'>    
-                    {# <div class="card border-0" style="width: 18rem;">
-                        <img src="{{ asset('uploads/images/tirage/grande_quantite.jpg') }}" class="card-img-top" alt="grande-quantité" >
-                        <div class="card-body">
-                            <h5 class="card-title">Tirage en quantité</h5>
-                            <p class="card-text"> Économisez en commandant en grande quantité</p>
-                            <p class='text-center'><a href="{{path('app_tirage_photo_index', {'tirage':'Tirage Identite'})}}"  class="btn btn-danger lien">Je creé</a></p>
-                        </div>
-                    </div>    #}
-                </div>
+                
             </div>
             
         </div>
@@ -74,8 +73,41 @@
     <section class='bg-light'>
         <div class='container'>
             <div class='row'>
-                <div class='col-4'></div>
-                <div class='col-8'></div>
+                <div class='col-12'>
+                    <h2 class='text-center mt-3'>Développement en grande quantité</h2>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-4'>
+                    <div class="card bg-light mt-5 mb-5" style="width: 18rem;">
+                        <img src="{{ asset('images/tirage/tirage-en-quantite.jpg') }}" class="card-img-top" alt="grande-quantité" >
+                        <div class="card-body">
+                            <h5 class="card-title">Pack 200 tirages | 15% offert</h5>
+                            <p class="card-text">Profitez de 15% offert dès 200 tirages de 10 à 18 cm</p>
+                            <a href="{{path('app_tirage_photo_index', {'tirage':'Tirage grande quantite'})}}" class="btn btn-danger">Je commande</a>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-4'>
+                    <div class="card bg-light mt-5 mb-5" style="width: 18rem;">
+                        <img src="{{ asset('images/tirage/tirage-en-quantite.jpg') }}" class="card-img-top" alt="grande-quantité" >
+                        <div class="card-body">
+                            <h5 class="card-title">Pack 300 tirages | 20% offert</h5>
+                            <p class="card-text">Profitez de 20% offert dès 300 tirages de 10 à 18 cm</p>
+                            <a href="{{path('app_tirage_photo_index', {'tirage':'Tirage grande quantite'})}}" class="btn btn-danger">Je commande</a>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-4'>
+                    <div class="card bg-light mt-5 mb-5" style="width: 18rem;">
+                        <img src="{{ asset('images/tirage/tirage-en-quantite.jpg') }}" class="card-img-top" alt="grande-quantité" >
+                        <div class="card-body">
+                            <h5 class="card-title">Pack 500 tirages | 25% offert</h5>
+                            <p class="card-text">Profitez de 25% offert dès 500 tirages de 10 à 18 cm</p>
+                            <a href="{{path('app_tirage_photo_index', {'tirage':'Tirage grande quantite'})}}" class="btn btn-danger">Je commande</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     
