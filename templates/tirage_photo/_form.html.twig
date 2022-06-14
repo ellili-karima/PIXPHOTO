@@ -15,26 +15,72 @@
             </script> #}
     </p>
     {{ form_row(form.tirage)}}
+    <div id='prix' class='text-end'></div>
     {% if (tirage != 'Tirage Identite')%}
         {{ form_row(form.options)}}
     {% endif %}
     
     <button class="btn btn-outline-danger">{{ button_label|default('Je crée')}}</button>
 
-    <div id='prix' class='text-end'></div>
+    
         <script>
             let prix = document.getElementById('prix');
             let tirages = document.getElementById('tirage_photo_tirage');
-            console.log(tirages)
+            let identite = document.getElementById('tirage_photo_identite_tirage');
+
+           
             tirages.addEventListener('click', function(){
                 tirages.addEventListener("change", () => {
-                    if({{idtirage[1]['id']}} == tirages.value){
-                        prix.innerHTML = {{idtirage[1]['prix']}};
+                    if({{idtirage[0]['id']}} == tirages.value){
+                        prix.innerHTML = {{idtirage[0]['prix']}} +' €'
                         
                     
-                    }})
+                    }
+                    if({{idtirage[1]['id']}} == tirages.value){
+                        prix.innerHTML = {{idtirage[1]['prix']}} +' €'
+                        
+                    
+                    }
+                    if({{idtirage[2]['id']}} == tirages.value){
+                        prix.innerHTML = {{idtirage[2]['prix']}} +' €'
+                        
+                    
+                    }
+                    if({{idtirage[3]['id']}} == tirages.value){
+                        prix.innerHTML = {{idtirage[3]['prix']}} +' €'
+                        
+                    
+                    }
+                    })
             
             })
-
+            
+            
+            //if({{tirage}} ='Tirage Identite'){
+            //identite.addEventListener('click', function(){
+                //identite.addEventListener("change", () => {
+                    //if({{idtirage[4]['id']}} == identite.value){
+                        //prix.innerHTML = {{idtirage[4]['prix']}} +' €'
+                        
+                    
+                    //}
+                    //if({{idtirage[5]['id']}} == identite.value){
+                        //prix.innerHTML = {{idtirage[5]['prix']}} +' €'
+                        
+                    
+                   // }
+                    //if({{idtirage[6]['id']}} == identite.value){
+                     //   prix.innerHTML = {{idtirage[6]['prix']}} +' €'
+                        
+                    
+                    //}
+                    
+                    //})
+            
+            //})
+            //}
+            
         </script>
+
+        
 {{ form_end(form) }}

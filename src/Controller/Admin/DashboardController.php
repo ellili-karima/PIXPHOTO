@@ -4,7 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Option;
 use App\Entity\Tirage;
+use App\Entity\Couleur;
 use App\Entity\DecoMurale;
+use App\Entity\Impression;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -66,8 +68,13 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Decoration Murale', 'fas fa-bars')->setSubItems([
             MenuItem::linkToCrud('Ajouter une décoration Murale', 'fas fa-plus', DecoMurale::class)->setAction(Crud::PAGE_NEW),
             MenuItem::linkToCrud('Liste des décoration Murale', 'fas fa-eye', DecoMurale::class),
+            MenuItem::linkToCrud('Ajouter une impression', 'fas fa-plus', Impression::class)->setAction(Crud::PAGE_NEW),
+            MenuItem::linkToCrud('Liste des impressions', 'fas fa-eye', Impression::class),
             ]);
-
+        yield MenuItem::subMenu('Couleur', 'fas fa-bars')->setSubItems([
+            MenuItem::linkToCrud('Ajouter une couleur', 'fas fa-plus', Couleur::class)->setAction(Crud::PAGE_NEW),
+            MenuItem::linkToCrud('Liste des couleurs', 'fas fa-eye', Couleur::class),
+            ]);
 
     }
 }

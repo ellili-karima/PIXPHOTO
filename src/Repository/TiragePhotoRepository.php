@@ -63,14 +63,14 @@ class TiragePhotoRepository extends ServiceEntityRepository
     }
 
     /**
-     * cette fonction permet de recupere la liste des tiragePhoto par type de tirage et par user dans l'ordre DESC
+     * cette fonction permet de recupérer la liste des tiragePhoto par type de tirage et par user dans l'ordre DESC
      */
     public function getTiragePhotoUser(User $user, $tirage)
     {
             $query = $this->createQueryBuilder('t');
             $query->join('t.photos' , 'p');
             $query->join('t.tirage' ,'ti')
-                ->andwhere($query->expr()->like('ti.tirage', $query->expr()->literal("$tirage%")))
+                ->andwhere($query->expr()->like('ti.tirage', $query->expr()->literal("$tirage")))
                 ->andWhere('p.user = :val ')
                 ->setParameter('val', $user->getId())
                 ->orderBy('t.id', 'DESC')

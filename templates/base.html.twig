@@ -20,7 +20,10 @@
 		<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Elsie&family=Montserrat:wght@400;500&family=Song+Myung&display=swap" rel="stylesheet">
 		
 		{% block stylesheets %}
+		
+			<link rel="stylesheet" href="{{ asset('css/normalize.css') }}" type="text/css"/>
 			<link rel="stylesheet" href="{{ asset('css/general.css') }}" type="text/css"/>
+			<link rel="stylesheet" href="{{ asset('css/tiles.css') }}" type="text/css"/>
 			{# <link rel="stylesheet" href="{{ asset('css/tirage.css') }}" type="text/css"/> #}
 			<!-- ce tags il va automatiquement compiler le css qui fait référence au app.css -->
 			{{ encore_entry_link_tags('app') }}

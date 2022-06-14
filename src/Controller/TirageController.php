@@ -25,11 +25,10 @@ class TirageController extends AbstractController
 
         $PrixMinTirageStandard = $repository->getPrixMinTirageStandard();
         $PrixMinTirageIdentite = $repository->getPrixMinTirageIdentite();
-        
             
        
         return $this->render('tirage/index.html.twig', [
-            // 'tirages' =>  $manager->getRepository(Tirage::class)->findAll(),
+            'tirages' =>  $manager->getRepository(Tirage::class)->findAll(),
             // 'typestirage' => $typesTirage,
             // 'images' => $images,
             'PrixMinTirageStandard' => $PrixMinTirageStandard['prix'],

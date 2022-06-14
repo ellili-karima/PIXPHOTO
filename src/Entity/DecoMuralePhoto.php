@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\Entity\Couleur;
 use App\Entity\DecoMurale;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\TiragePhotoRepository;
 use Doctrine\Common\Collections\Collection;
+use App\Repository\DecoMuralePhotoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
-#[ORM\Entity(repositoryClass: TiragePhotoRepository::class)]
+#[ORM\Entity(repositoryClass: DecoMuralePhotoRepository::class)]
 class DecoMuralePhoto
 {
     #[ORM\Id]
@@ -16,18 +17,22 @@ class DecoMuralePhoto
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: DecoMurale::class, inversedBy: 'tiragePhotos')]
+    #[ORM\ManyToOne(targetEntity: DecoMurale::class, inversedBy: 'decoMuralePhotos')]
     #[ORM\JoinColumn(nullable: false)]
     private $decoMurale;
 
-    #[ORM\Column(type: 'integer')]
-    private $quantiteDeco;
-
-    #[ORM\OneToMany(mappedBy: 'decoMuralePhoto', targetEntity: Photo::class, orphanRemoval: true , cascade:['persist','remove'])]//orphoned c a d si je supprime le parent les enfants serant supprimés ( si je supprime tiragePhoto, les photos seront supprimés)
+    #[ORM\OneToMany(mappedBy: 'decoMuralePhoto', targetEntity: Photo::class, orphanRemoval: true , cascade:['persist','remove'])]//orphoned c a d si je supprime le parent les enfants serant supprimés ( si je supprime decoMuralePhoto, les photos seront supprimés)
     private $photos;
 
     #[ORM\Column(type: 'datetime')]
     private $dateCreation;
+
+    #[ORM\ManyToOne(targetEntity: Impression::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $impression;
+
+    #[ORM\ManyToOne(targetEntity: Couleur::class)]
+    private $couleur;
 
     
     public function __construct()
@@ -40,9 +45,6 @@ class DecoMuralePhoto
     {
         return $this->id;
     }
-
-   
-
 
     /**
      * Get the value of decoMurale
@@ -64,42 +66,33 @@ class DecoMuralePhoto
         return $this;
     }
 
+    
     /**
-     * Get the value of quantiteDeco
-     */ 
-    public function getQuantiteDeco()
-    {
-        return $this->quantiteDeco;
-    }
-
-    /**
-     * Set the value of quantiteDeco
-     *
-     * @return  self
-     */ 
-    public function setQuantiteDeco($quantiteDeco)
-    {
-        $this->quantiteDeco = $quantiteDeco;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of photos
-     */ 
-    public function getPhotos()
+     * @return Collection<int, Photo>
+     */
+    public function getPhotos(): Collection
     {
         return $this->photos;
     }
 
-    /**
-     * Set the value of photos
-     *
-     * @return  self
-     */ 
-    public function setPhotos($photos)
+    public function addPhoto(Photo $photo): self
     {
-        $this->photos = $photos;
+        if (!$this->photos->contains($photo)) {
+            $this->photos[] = $photo;
+            $photo->setDecoMuralePhoto($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): self
+    {
+        if ($this->photos->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getDecoMuralePhoto() === $this) {
+                $photo->setDecoMuralePhoto(null);
+            }
+        }
 
         return $this;
     }
@@ -123,4 +116,30 @@ class DecoMuralePhoto
 
         return $this;
     }
+
+    public function getImpression(): ?Impression
+    {
+        return $this->impression;
+    }
+
+    public function setImpression(?Impression $impression): self
+    {
+        $this->impression = $impression;
+
+        return $this;
+    }
+
+    public function getCouleur(): ?Couleur
+    {
+        return $this->couleur;
+    }
+
+    public function setCouleur(?Couleur $couleur): self
+    {
+        $this->couleur = $couleur;
+
+        return $this;
+    }   
+
+   
 }

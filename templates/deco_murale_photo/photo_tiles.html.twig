@@ -1,0 +1,230 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Photo Tiles{% endblock %}
+{% block javascripts %}
+	<script src="{{ asset('js/tiles.js') }}" defer ></script>
+    <script>
+        //on attends que le DOM soit chargé
+        window.onload = () => {
+            //on va chercher le format 
+            let format = document.querySelector('#deco_murale_photo_tiles_decoMurale');
+            //on va ajouter un evenement sur le format
+            //format.addEventListener va détecté le changement du format 
+            format.addEventListener('change', function(){
+                // permet d'aller chercher la balise form la plus proche de mon element ( sa va etre son parent)
+                let form = this.closest('form');
+                //console.log(form);
+                //je vais envoyer mon formulaire en ajax directement vers mon back-end (vers l'action de se formulaire)
+                //on me faut les données
+                let data = this.name + '=' + this.value;
+                let valueFormat = this.value;
+                console.log(data);
+                //j'envoies en ajax à mon formulaire avec form.action
+                fetch(form.action, { 
+                    //on recupere la methode
+                    method: form.getAttribute('method'),
+                    //j'envoie des données
+                    body: data,
+                    //le type est un formulaire encodé
+                    headers: {
+                        'content-type': 'application/x-www-form-urlencoded; charset:utf-8'
+                    }
+                })
+                //le fetch est une promesse donc mon va voir une response
+                //la response je la traite avec response.text()
+                .then(response => response.text())
+                //et ca va me retourner une nouvelle promesse que je vais la faire en .then
+                //et donc là je vais avoir mon html
+                .then(html => {
+                    //console.log(html);
+                    //je crée un element html dont le quelle je vais mettre mon html
+                    let content = document.createElement("html")
+                    content.innerHTML = html;
+                    //je crée un nouveau element pour recuperer le select qui contient les options couleurs
+                    let nouveauSelect = content.querySelector('#deco_murale_photo_tiles_couleur');   
+                    //je remplace le select vide par le select chargé
+                    document.querySelector('#deco_murale_photo_tiles_couleur').replaceWith(nouveauSelect); 
+                    //let form = this.closest('form');
+                    //console.log(form); 
+                    //quand le format est selectionné on a pas le prix 
+                    prix.innerHTML = '' ; 
+                    couleurs.innerHTML = '';
+                    //je vais faire un evenement sur le changement des couleurs
+                    couleurChecked = document.querySelectorAll("input[name='deco_murale_photo_tiles[couleur]'").forEach((input2) => {
+                        input2.addEventListener('change', (event)=> {
+                            idCouleur = event.target.value;
+                            console.log(valueFormat)
+                            {% for decoMurale in decoMurales %}
+                                if({{decoMurale.id}} == valueFormat){
+                                    if(valueFormat == 11){
+                                        {% for D12 in deco12 %}
+                                            if({{D12.couleur.id}} == idCouleur){
+                                            prix.innerHTML = ({{D12.prix}} + ' €');
+                                            couleurs.innerHTML = "<div class='card mt-2' style='width: 100px;'><img src='/images/tiles/"+{{D12.couleur.id}}+".png' class='card-img-top' alt=photo_tiles_latte'></div>";
+                                            }
+                                        {% endfor %}
+                                    }else if(valueFormat == 8){
+                                        {% for D8 in deco8 %}
+                                            if({{D8.couleur.id}} == idCouleur && idCouleur != '' ){
+                                            prix.innerHTML = ({{D8.prix}} + ' €');
+                                            couleurs.innerHTML = "<div class='card mt-2' style='width: 100px;'><img src='/images/tiles/"+{{D8.couleur.id}}+".png' class='card-img-top' alt=photo_tiles_latte'></div>";
+                                            }
+                                        {% endfor %}
+                                    }else{
+                                        prix.innerHTML = '';
+                                    }
+                                }
+                            {% endfor %}
+                        });
+                    
+                    }) 
+                })
+            });  
+        }
+    </script>
+    
+{% endblock %}
+{% block body %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-12 text-center" id='image'>
+                            <img src="{{ asset('images/tiles/image1.jpg')}}" alt="photo_tiles">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center mt-2">
+                            <p class='mt-5 me-3' id='pres'><i class="fa-solid fa-angle-left"></i></p>
+                            <div id='images'>
+                                
+                            </div>
+                            <p class='mt-5 ms-3' id='suiv'><i class="fa-solid fa-angle-right"></i></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 border-start ps-5">
+                    <h3>Photo tiles</h3>
+                    {{ include('deco_murale_photo/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </section>
+    <hr>
+    <section class='container'>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Face</th>
+                            <th>Format</th>
+                            <th>Couleur</th>
+                            <th>Prix</th>
+                            <th>Actions</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for deco_murale_photo in deco_murale_photos %}
+                        <tr>
+                            <td>
+                                {% for photo in deco_murale_photo.photos %}   
+                                    <img src="{{ asset('uploads/decoMurale/tiles/' ~ photo.photo) }}"  alt="decoMurale" id='photo_tirage' class='"card-img-top Regular shadow rounded'>
+                                {% endfor %}
+                            </td>
+                            {# <td>{{ deco_murale_photo.dateCreation ? deco_murale_photo.dateCreation|date('Y-m-d H:i:s') : '' }}</td> #}
+                            <td>{{ deco_murale_photo.impression.nom}}</td>
+                            <td>{{ deco_murale_photo.decoMurale.format}}</td>
+                            <td>{{ deco_murale_photo.couleur}}</td>
+                            <td>{{ deco_murale_photo.decoMurale.prix}} €</td>
+                            <td>
+                                <form method="post" action="{{ path('app_deco_murale_photo_tiles_delete', {'id': deco_murale_photo.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ deco_murale_photo.id) }}">
+                                    <button class="btn"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </form>
+                                <a href="{{ path('app_deco_murale_photo_tiles_edit', {'id': deco_murale_photo.id}) }}"><button class='btn'><i class="fa-solid fa-pen-to-square"></i></button></a>
+                            </td>
+                            <td>  
+                                <a href="{{path('cart_add_deco', {'id': deco_murale_photo.id })}}" class='btn btn-success'><i class="fa-solid fa-cart-shopping"></i> Ajouter</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    
+<script>
+
+
+    // function myfunction(event) {
+        
+        
+    //         id= event.target.value;
+    //         console.log(id);
+        
+    // }
+   
+  
+
+        
+      {# if(formatCheched && couleurChecked){ 
+          if(formaa && couleuraa){
+        if({{idDeco[0].format}}== formaa){
+            if({{idDeco[0].couleur}} == couleuraa){
+            prix.innerHTML={{idDeco[0].prix}}
+        }}}}
+     #}
+{#     
+        let prix= document.getElementById('prix');
+        let formaa='toto';
+            
+            formatCheched = document.querySelectorAll("input[name='deco_murale_photo_tiles[decoMurale]'").forEach((input) => {
+               formaa = input.addEventListener('change', (event)=> {
+                    id= event.target.value;
+                //console.log(id);
+                    if(id == 11 ){
+                        formaa = '12x12 cm';
+                       
+                    }else if(id== 8){
+                    formaa = '8x8 cm'
+                }
+                //sessionStorage.setItem('formaa',formaa);
+                // console.log(formaa)
+                });
+        }),
+        console.log(formaa)
+        couleurChecked = document.querySelectorAll("input[name='deco_murale_photo_tiles[couleur]'").forEach((input2) => {
+                            input2.addEventListener('change', (event)=> {
+                                idCouleur= event.target.value;
+                                //console.log(id);
+                                if(idCouleur == 2 ){
+                                    couleuraa = 'Noir';
+                                    prix.innerHTML = 'a';
+                                }
+                                if(idCouleur== 3){
+                                    couleuraa = 'Blanc';
+                                    prix.innerHTML = 'b';
+                                }
+                                if(idCouleur== 4){
+                                    couleuraa = 'Latte';
+                                    prix.innerHTML = 'c';
+                                }
+                                //sessionStorage.setItem('couleuraa',couleuraa);
+                                //console.log(couleuraa)
+                                
+                            });
+                        }) #}
+                    
+                  
+</script>
+
+{% endblock %}

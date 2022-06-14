@@ -1,12 +1,11 @@
 <header class='mb-0'>
 
 	<div class="container-fluid m-0">
-		<div id='haut_nav'></div>
-		<nav class="navbar navbar-expand-lg bg-light d-flex flex-nowrap">
+		<nav class="navbar navbar-expand-lg d-flex flex-nowrap">
 			<a class="navbar-brand p-2 w-100" href="{{path('app_home')}}"><img id='logo' src="/images/logo/pixphoto.png" alt="logo"></a>
-			<ul class="navbar-nav d-flex">
+			<ul class="navbar-nav flexwrap">
 				{% if app.user %}
-					<li class="nav-item dropdown">
+					<li class="nav-item dropdown dropstart">
 						<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="fa-solid fa-user"></i>
 						</a>
@@ -17,7 +16,6 @@
 							<li><a class="dropdown-item" href="{{path('app_logout')}}">Déconnexion</a></li>
 						</ul>
 					</li>
-					
 				{% else %}
 					<li class="nav-item me-2">
 						<a class="nav-link" href="{{path('app_login')}}">Connexion</a>
@@ -29,9 +27,11 @@
 					</a>
 				</li>
 			</ul>
+			<form class="d-flex" role="search">
+				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success" type="submit">Search</button>
+			</form>
 		</nav>
-
-		
 		<nav id='second_nav' class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -206,6 +206,50 @@
 							</div>
 						</div>
 					</li>
+
+					<li class="nav-item dropdown has-megamenu">
+				<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> Décoration Murale  </a>
+				<div class="dropdown-menu megamenu" role="menu">
+					<div class="row g-3">
+						<div class="col-lg-3 col-6">
+							<div class="col-megamenu">
+								<h6 class="title">Photo Tiles</h6>
+								<ul class="list-unstyled">
+									<li><a href="#"><img src="/images/menu/tiles.jpg" class="card-img-top" alt="déco-murale"></a></li>
+								</ul>
+							</div>  <!-- col-megamenu.// -->
+						</div><!-- end col-3 -->
+						<div class="col-lg-3 col-6">
+							<div class="col-megamenu">
+								<h6 class="title">Photo Toiles</h6>
+								<ul class="list-unstyled">
+									<li><a href="#"><img src="/images/menu/toiles.png" class="card-img-top" alt="déco-murale"></a></li>
+								</ul>
+							</div>  <!-- col-megamenu.// -->
+						</div><!-- end col-3 -->
+						<div class="col-lg-3 col-6">
+							<div class="col-megamenu">
+								<h6 class="title">Photo sur bois MDF</h6>
+								<ul class="list-unstyled">
+									<li><a href="#"><img src="/images/menu/mdf.jpg" class="card-img-top" alt="déco-murale"></a></li>
+								</ul>
+							</div>  <!-- col-megamenu.// -->
+						</div>    
+						<div class="col-lg-3 col-6">
+							<div class="col-megamenu">
+								<h6 class="title">Cadres photo</h6>
+								<ul class="list-unstyled">
+									<li><a href="#"><img src="/images/menu/cadres.jpg" class="card-img-top" alt="déco-murale"></a></li>
+								</ul>
+							</div>  <!-- col-megamenu.// -->
+						</div><!-- end col-3 -->
+					</div><!-- end row --> 
+				</div> <!-- dropdown-mega-menu.// -->
+			</li>
+
+
+
+
 					<li class="nav-item">
 						<a href="" class="nav-link font-weight-bold text-uppercase">About</a>
 					</li>

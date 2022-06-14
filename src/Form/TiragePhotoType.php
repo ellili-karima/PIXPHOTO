@@ -55,9 +55,9 @@ class TiragePhotoType extends AbstractType
                 'choice_label'=>'format',
                 'label' => ' ',
                 'query_builder' =>function(EntityRepository $er){
-                    $tirage='Tirage Photo';
-                    $qb = $er->createQueryBuilder('t');
-                        $qb->where($qb->expr()->like('t.tirage', $qb->expr()->literal("$tirage")))
+                    $qb = $er->createQueryBuilder('t')
+                        ->andWhere('t.tirage = :val')
+                        ->setParameter('val', 'Tirage Standard')
                     ;
                     return $qb;
                 }

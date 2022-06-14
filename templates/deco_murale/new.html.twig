@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New DecoMurale{% endblock %}
+
+{% block body %}
+    <h1>Create new DecoMurale</h1>
+
+    {{ include('deco_murale/_form.html.twig') }}
+
+    <a href="{{ path('app_deco_murale_index') }}">back to list</a>
+{% endblock %}

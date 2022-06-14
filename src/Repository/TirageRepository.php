@@ -54,7 +54,7 @@ class TirageRepository extends ServiceEntityRepository
     public function getPrixMinTirageStandard(){
         $query = $this->createQueryBuilder('t');
         $query->select('t.prix')
-            ->andwhere($query->expr()->like('t.tirage', $query->expr()->literal("Tirage Photo%")))
+            ->andwhere($query->expr()->like('t.tirage', $query->expr()->literal("Tirage Standard")))
             ->orderBy('t.prix' , 'ASC')
             ->setMaxResults(1)
             ;
@@ -68,13 +68,20 @@ class TirageRepository extends ServiceEntityRepository
     public function getPrixMinTirageIdentite(){
         $query = $this->createQueryBuilder('t');
         $query->select('t.prix')
-            ->andwhere($query->expr()->like('t.tirage', $query->expr()->literal("Tirage Identite%")))
+            // ->andwhere($query->expr()->like('t.tirage', $query->expr()->literal("Tirage Identite")))
+            ->andWhere('t.tirage = :val')
+            ->setParameter('val', 'Tirage Identite')
             ->orderBy('t.prix' , 'ASC')
             ->setMaxResults(1)
             ;
         return $query->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * on recupere l id et  le prix d'un tiragePhoto
+     *
+     * @return void
+     */
     public function getId(){
         $query = $this->createQueryBuilder('t')
             ->select('t.id' ,'t.prix') 

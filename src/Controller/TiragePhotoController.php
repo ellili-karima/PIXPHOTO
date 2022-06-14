@@ -14,10 +14,10 @@ use App\Repository\TiragePhotoRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\UpdateTiragePhotoIdentiteType;
 use App\Form\UpdateTiragePhotoQuantiteType;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -35,7 +35,7 @@ class TiragePhotoController extends AbstractController
 
         $tiragePhoto = new TiragePhoto();
 
-        if ($tirage == 'Tirage Photo') {
+        if ($tirage == 'Tirage Standard') {
             $form = $this->createForm(TiragePhotoType::class, $tiragePhoto);
             $form->handleRequest($request);
 
@@ -143,6 +143,7 @@ class TiragePhotoController extends AbstractController
             'tiragePhoto' => $tiragePhoto,
             'tirage' => $tirage,
             'tirageRepository' => $tirageRepository,
+            //idtirage pour js select prix
             'idtirage' => ($tirageRepository->getId()),
             dump(($tirageRepository->getId())[0]['id']),
             dump($tirageRepository->getId())
@@ -164,16 +165,25 @@ class TiragePhotoController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_tirage_photo_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, TiragePhoto $tiragePhoto, TiragePhotoRepository $tiragePhotoRepository, UserInterface $user): Response
+    public function edit(Request $request, TiragePhoto $tiragePhoto, TiragePhotoRepository $tiragePhotoRepository, UserInterface $user, PaginatorInterface $paginator): Response
     {
         //je recupere la valeur de type de l url
         (string) $tirage = $request->get('tirage');
         //je recupere la liste des tiragePhoto de l'utilisateur connecté par type de tirage
         $tirage_photo = $tiragePhotoRepository->getTiragePhotoUser($user, $tirage);
 
-        if ($tirage == 'Tirage Photo') {
+        if ($tirage == 'Tirage Standard') {
+            //dans updateTiragePhotoType le chmaps de type file n'est pas requiste
             $formEdit = $this->createForm(UpdateTiragePhotoType::class, $tiragePhoto);
             $formEdit->handleRequest($request);
+            //Pagination sur l'affichage des photos
+            $AllPhotos = $tiragePhoto->getPhotos();
+            $AllPhotos = $paginator->paginate(
+                $AllPhotos, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                2 
+            );
+        
             if ($formEdit->isSubmitted() && $formEdit->isValid()) {
                 $photos = $formEdit->get('photo')->getData();
                 //on boucle sur les photos
@@ -194,7 +204,7 @@ class TiragePhotoController extends AbstractController
                     $tiragePhoto->addPhoto($img);
                 }
                 
-                //on recuper le checkbox des options
+                //on recupere le checkbox des options
                 $options = $formEdit->get('options')->getData();
                 foreach ($options as $option) {
                     $tiragePhoto->addOptionsTiragePhoto($option);
@@ -224,6 +234,7 @@ class TiragePhotoController extends AbstractController
         } elseif ($tirage == 'Tirage Identite') {
             $formEdit = $this->createForm(UpdateTiragePhotoIdentiteType::class, $tiragePhoto);
             $formEdit->handleRequest($request);
+            $AllPhotos = $tiragePhoto->getPhotos();
             if ($formEdit->isSubmitted() && $formEdit->isValid()) {
                 $photo = $formEdit->get('photo')->getData();
                 $id = $request->get('id');
@@ -258,6 +269,7 @@ class TiragePhotoController extends AbstractController
 
             $formEdit = $this->createForm(UpdateTiragePhotoQuantiteType::class, $tiragePhoto);
             $formEdit->handleRequest($request);
+            $AllPhotos = $tiragePhoto->getPhotos();
             if ($formEdit->isSubmitted() && $formEdit->isValid()) {
                 $photos = $formEdit->get('photo')->getData();
                 //on boucle sur les photos
@@ -290,20 +302,20 @@ class TiragePhotoController extends AbstractController
         }
         return $this->renderForm('tirage_photo/edit.html.twig', [
             'tirage_photo' => $tiragePhoto,
+            'photos' => $AllPhotos,
             'form' => $formEdit,
             'tirage_photos' =>  $tirage_photo,
             'tirage' => $tirage
-        ]);
+        ]); 
     }
 
 
 
     #[Route('/{id}', name: 'app_tirage_photo_delete', methods: ['POST'])]
-    public function delete(Request $request, TiragePhoto $tiragePhoto, TiragePhotoRepository $tiragePhotoRepository, UserInterface $user): Response
+    public function delete(Request $request, TiragePhoto $tiragePhoto, TiragePhotoRepository $tiragePhotoRepository): Response
     {
         //je recupere la valeur de type de l url
         (string) $tirage = $request->get('tirage');
-        $id = $request->get('id');
         if ($this->isCsrfTokenValid('delete' . $tiragePhoto->getId(), $request->request->get('_token'))) {
             //on recupere les photos 
             $photos = $tiragePhoto->getPhotos();
@@ -325,7 +337,8 @@ class TiragePhotoController extends AbstractController
     #[Route('/photo/{id}', name: 'app_photo_delete', methods: ['POST'])]
     public function deletePhoto(ManagerRegistry $manager, Request $request, Photo $photo): Response
     {
-        
+        //je recupere la valeur de type de l url
+        (string) $tirage = $request->get('tirage');
         if ($this->isCsrfTokenValid('delete' . $photo->getId(), $request->request->get('_token'))) {
 
             //on récupère le nom de la photo
@@ -339,7 +352,7 @@ class TiragePhotoController extends AbstractController
             $em->flush();
             
             $this->addFlash("success", "La photo a été supprimé avec succès");
-            return $this->redirectToRoute('app_tirage_photo_index', ['tirage' => 'Tirage Photo'], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_tirage_photo_index', ['tirage' => $tirage], Response::HTTP_SEE_OTHER);
         } else {
             $this->addFlash('error', "Echec la photo n'a pas été supprimé avec succès");
         }

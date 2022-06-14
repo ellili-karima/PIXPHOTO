@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DecoMuralePhoto index{% endblock %}
+
+{% block body %}
+    <h1>DecoMuralePhoto index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DateCreation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for deco_murale_photo in deco_murale_photos %}
+            <tr>
+                <td>{{ deco_murale_photo.id }}</td>
+                <td>{{ deco_murale_photo.dateCreation ? deco_murale_photo.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_deco_murale_photo_show', {'id': deco_murale_photo.id}) }}">show</a>
+                    <a href="{{ path('app_deco_murale_photo_edit', {'id': deco_murale_photo.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_deco_murale_photo_new') }}">Create new</a>
+{% endblock %}

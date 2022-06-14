@@ -3,7 +3,6 @@
 namespace App\Form;
 
 
-use App\Entity\Photo;
 use App\Entity\Option;
 use App\Entity\Tirage;
 use App\Entity\TiragePhoto;
@@ -52,12 +51,12 @@ class UpdateTiragePhotoType extends AbstractType
                 'class'=> Tirage::class,
                 'multiple'=>false,
                 'placeholder' => 'choisissez le format',
-                'choice_label'=>'tirage',
+                'choice_label'=>'format',
                 'label' => ' ',
                 'query_builder' =>function(EntityRepository $er){
-                    $tirage='Tirage Photo';
+                    $tirage='Tirage Standard';
                     $qb = $er->createQueryBuilder('t');
-                        $qb->where($qb->expr()->like('t.tirage', $qb->expr()->literal("$tirage%")))
+                        $qb->where($qb->expr()->like('t.tirage', $qb->expr()->literal("$tirage")))
                     ;
                     return $qb;
                 }

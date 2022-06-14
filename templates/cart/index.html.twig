@@ -3,92 +3,133 @@
 {% block title %}Votre panier{% endblock %}
 
 {% block body %}
-    <section class='bg_light p-3'>
-        <h1>Votre panier</h1>
-    </section>
-    
-    <table class='table'>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Service</th>
-                <th>Prix</th>
-                <th>Quantité</th>
-                <th>Total</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            {% for element in dataPanier %}
-                <tr>
-                    <td>{{element.date|date('Y-m-d H:i:s')}}</td>
-                    <td>{{element.tiragePhoto.tirage.tirage}}</td>
-                    <td>
-                    {% if element.tiragePhoto.tirage.tirage == 'Tirage grande quantite' %}
-                        {% if (element.tiragePhoto.photos|length) < 200 %}
-                            {{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix) }} €
-                        {% elseif (element.tiragePhoto.photos|length) >= 200 and (element.tiragePhoto.photos|length) < 300 %}
-                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*15/100))*(element.tiragePhoto.photos|length) }} €
-                        {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
-                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*20/100))*(element.tiragePhoto.photos|length) }} €
-                        {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
-                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*25/100))*(element.tiragePhoto.photos|length) }} €     
-                        {% endif %}
-                    {% else %}
-                        {{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix) }} €
-                    {% endif %}   
-                        </td>
-                    <td>{{element.quantite}}</td>
-                    <td>
-                        {% if element.tiragePhoto.tirage.tirage == 'Tirage grande quantite' %}
-                            {% if (element.tiragePhoto.photos|length) < 200 %}
-                                {{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix)*(element.quantite) }} €
-                            {% elseif (element.tiragePhoto.photos|length) >= 200 and (element.tiragePhoto.photos|length) < 300 %}
-                                {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*15/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €
-                            {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
-                                {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*20/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €
-                            {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
-                                {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*25/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €     
-                            {% endif %}
-                        {% else %}
-                            {{element.quantite * element.tiragePhoto.tirage.prix * (element.tiragePhoto.photos|length)}} €</td>
-                        {% endif %}  
-                    <td>
-                        <a href="{{path('cart_add', {id: element.tiragePhoto.id})}}" class='btn btn-success'>
-                            <i class="fa-solid fa-cart-plus"></i>
-                        </a>
-                        <a href="{{path('cart_remove', {id: element.tiragePhoto.id})}}" class='btn btn-warning'>
-                            <i class="fa-solid fa-cart-minus"></i>
-                        </a>
-                        <a href="{{path('cart_delete', {id: element.tiragePhoto.id})}}" class='btn btn-danger'>
-                            <i class="fa-solid fa-cart-xmark"></i>
-                        </a>
-
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan='6' class='text-center'>
-                        Votre panier est vide
-                    </td>
-                </tr>
+    <section class='container'>
+        <div class="row">
+            <div class="col-12">
+                <h1 class='text-center'>Votre Panier</h1>
+                {% if dataPanier %}
+                    <h4 class='mb-3'>Tirages Photos :</h4>
+                    {% for element in dataPanier %}
+                        <div class='position-relative border border-dark rounded mb-5 shadow'>
+                            <table class='table border-1 text-center'>
+                                <tr class='border-bottom border-1 border-dark'>
+                                    <td>{{element.tiragePhoto.tirage.tirage}}</td>
+                                    <td>{{element.date|date('Y-m-d H:i:s')}}</td>
+                                    <td>({{element.tiragePhoto.photos|length}}) {% if element.tiragePhoto.photos|length == 1 %}photo {% else %}photos{% endif %} </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        {% if not element.tiragePhoto.photos is empty %}
+                                        {% set firstphoto = element.tiragePhoto.photos|first  %}
+                                            <img src="{{ asset('uploads/tirage/' ~ firstphoto.photo) }}" class="card-img-top rounded shadow" id="photo_tirage" alt="tirage" >
+                                        {% endif %} 
+                                    </td>
+                                    <td>
+                                        <strong>Descriptions</strong>
+                                        <ul class='list-unstyled'>
+                                        <li>Format : {{element.tiragePhoto.tirage.format}}</li>
+                                        {% if not element.tiragePhoto.optionsTiragePhoto is empty %}
+                                        <li>Options : {% for option in element.tiragePhoto.optionsTiragePhoto %}
+                                                        {{option.nom}}
+                                                    {% endfor %}
+                                        </li>
+                                        {% endif %}
+                                        </ul>
+                                    </td>
+                                    <td><strong>Quantité </strong><br>
+                                        <a href="{{path('cart_remove_tirage', {id: element.tiragePhoto.id})}}" class='btn'>
+                                            <i class="fa-solid fa-caret-left"></i>
+                                        </a>
+                                        {{element.quantite}}
+                                        <a href="{{path('cart_add_tirage', {id: element.tiragePhoto.id})}}" class='btn'>
+                                            <i class="fa-solid fa-caret-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </table>
+                                <p class='text-end pe-5 text-danger fs-5'>Prix: 
+                                    {% if element.tiragePhoto.tirage.tirage == 'Tirage grande quantite' %}
+                                        {% if (element.tiragePhoto.photos|length) < 200 %}
+                                            {{ (element.tiragePhoto.photos|length) * (element.tiragePhoto.tirage.prix)*(element.quantite) }} €
+                                        {% elseif (element.tiragePhoto.photos|length) >= 200 and (element.tiragePhoto.photos|length) < 300 %}
+                                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*15/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €
+                                        {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
+                                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*20/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €
+                                        {% elseif (element.tiragePhoto.photos|length) >= 300 and (element.tiragePhoto.photos|length) < 500 %}
+                                            {{ ((element.tiragePhoto.tirage.prix)-((element.tiragePhoto.tirage.prix)*25/100))*(element.tiragePhoto.photos|length)*(element.quantite) }} €     
+                                        {% endif %}
+                                    {% else %}
+                                        {{element.quantite * element.tiragePhoto.tirage.prix * (element.tiragePhoto.photos|length)}} €</td>
+                                    {% endif %} 
+                                </p>
+                                
+                            
+                                <span class="position-absolute top-0 start-100 translate-middle p-2 ">
+                                    <a href="{{path('cart_delete_tirage', {id: element.tiragePhoto.id})}}" class='btn btn-outline-danger border-0'>
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                    </a>
+                                </span>
+                        </div>
+                    {% endfor %}
                 
-            {% endfor %} 
-        </tbody>
-        <tfoot class="table-group-divider">
-            <tr>
-                <td colspan='4'>Total</td>
-                <td>{{ total }} €</td>
-                <td>
-                    <a href="{{path('delete_all')}}" class='btn btn-danger'>
-                        <i class="fa-solid fa-cart-circle-xmark"></i>
-                    </a>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-    <div class='text-end'><a href=""><button class='btn btn-primary'>Commander</button></a></div>
-    
+                {% endif %}
 
+                {% if dataPanierDeco %}
+                    <h4 class='mb-3'>Décorations Murales :</h4>
+                    {% for element in dataPanierDeco %}
+                        <div class='position-relative border border-dark rounded mb-5 shadow'>
+                            <table class='table border-1 text-center'>
+                                <tr class='border-bottom border-1 border-dark'>
+                                    <td>Photo {{element.decoMuralePhoto.decoMurale.support}}</td>
+                                    <td>{{element.date2|date('Y-m-d H:i:s')}}</td>
+                                    <td>({{element.decoMuralePhoto.photos|length}}) photo</td>
+                                </tr>
+                                <tr>
+                                    <td> 
+                                        {% if not element.decoMuralePhoto.photos is empty %}
+                                        {% set firstphoto = element.decoMuralePhoto.photos|first  %}
+                                            <img src="{{ asset('uploads/decoMurale/tiles/' ~ firstphoto.photo) }}" class="card-img-top rounded shadow" id="photo_tirage" alt="deco_murale" >
+                                        {% endif %} 
+                                    <td>
+                                        <strong>Descriptions</strong>
+                                        <ul class='list-unstyled'>
+                                            <li>Face : {{element.decoMuralePhoto.impression.nom}}</li>
+                                            <li>Format : {{element.decoMuralePhoto.decoMurale.format}}</li>
+                                            <li>Couleur : {{element.decoMuralePhoto.couleur.couleur}}</li>
+                                        </ul>
+                                    </td>
+                                    <td><strong>Quantité </strong><br>
+                                        <a href="{{path('cart_remove_deco', {id: element.decoMuralePhoto.id})}}" class='btn'>
+                                            <i class="fa-solid fa-caret-left"></i>
+                                        </a>
+                                        {{element.quantite}}
+                                        <a href="{{path('cart_add_deco', {id: element.decoMuralePhoto.id})}}" class='btn'>
+                                            <i class="fa-solid fa-caret-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p class='text-end pe-5 text-danger fs-5'>Prix: {{element.quantite * element.decoMuralePhoto.decoMurale.prix}} €</p>
+                            <span class="position-absolute top-0 start-100 translate-middle p-2  rounded-circle">
+                                <a href="{{path('cart_delete_deco', {id: element.decoMuralePhoto.id})}}" class='btn btn-outline-danger border-0'>
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                </a>
+                            </span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-12 text-end pe-5">Sous-total: {{ total + total2 }} €</div>
+        </div>
+        <div class='text-end pe-5'><a href=""><button class='btn btn-success'>Commander</button></a></div>
+
+        <a href="{{path('delete_all')}}" class='btn btn-danger'>
+            Vider le panier
+        </a>
+    
+    </section>
 
 {% endblock %}

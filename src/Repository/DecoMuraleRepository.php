@@ -45,6 +45,19 @@ class DecoMuraleRepository extends ServiceEntityRepository
         }
     }
 
+
+    /**
+     * on recupere l id et  le prix d'un tiragePhoto
+     *
+     * @return void
+     */
+    public function getIdDeco(){
+        $query = $this->createQueryBuilder('d')
+        ->join('d.couleur' ,'c')
+            ->select('d.id' , 'd.format','d.prix', 'c.couleur') 
+            ;
+        return $query->getQuery()->getResult();;
+    }
     // /**
     //  * @return DecoMurale[] Returns an array of DecoMurale objects
     //  */

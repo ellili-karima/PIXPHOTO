@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\DecoMuralePhoto;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PhotoRepository;
 use Vich\UploaderBundle\Entity\File;
@@ -25,28 +26,12 @@ class Photo
     private $user;
 
     #[ORM\ManyToOne(targetEntity: TiragePhoto::class, inversedBy: 'photos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private $tiragePhoto;
 
-    #[ORM\OneToMany(mappedBy: 'photo', targetEntity: DecoMuralePhoto::class)]
-    private $decoMuralePhotos;
-
-    #[ORM\OneToMany(mappedBy: 'photo', targetEntity: DecoMuralePhoto::class)]
-    private $k;
-
-    #[ORM\ManyToOne(targetEntity: DecoMuralePhoto::class, inversedBy: 'photo')]
+    #[ORM\ManyToOne(targetEntity: DecoMuralePhoto::class, inversedBy: 'photos')]
+    #[ORM\JoinColumn(nullable: true)]
     private $decoMuralePhoto;
-
-
-    public function __construct()
-    {
-        $this->decoMuralePhotos = new ArrayCollection();
-        $this->k = new ArrayCollection();
-    }
-
-   
-
-   
 
     public function getId(): ?int
     {
@@ -64,8 +49,6 @@ class Photo
 
         return $this;
     }
-
-
 
     public function getUser(): ?User
     {
@@ -91,65 +74,6 @@ class Photo
         return $this;
     }
 
-    /**
-     * @return Collection<int, DecoMuralePhoto>
-     */
-    public function getDecoMuralePhotos(): Collection
-    {
-        return $this->decoMuralePhotos;
-    }
-
-    public function addDecoMuralePhoto(DecoMuralePhoto $decoMuralePhoto): self
-    {
-        if (!$this->decoMuralePhotos->contains($decoMuralePhoto)) {
-            $this->decoMuralePhotos[] = $decoMuralePhoto;
-            $decoMuralePhoto->setPhoto($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDecoMuralePhoto(DecoMuralePhoto $decoMuralePhoto): self
-    {
-        if ($this->decoMuralePhotos->removeElement($decoMuralePhoto)) {
-            // set the owning side to null (unless already changed)
-            if ($decoMuralePhoto->getPhoto() === $this) {
-                $decoMuralePhoto->setPhoto(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, DecoMuralePhoto>
-     */
-    public function getK(): Collection
-    {
-        return $this->k;
-    }
-
-    public function addK(DecoMuralePhoto $k): self
-    {
-        if (!$this->k->contains($k)) {
-            $this->k[] = $k;
-            $k->setPhoto($this);
-        }
-
-        return $this;
-    }
-
-    public function removeK(DecoMuralePhoto $k): self
-    {
-        if ($this->k->removeElement($k)) {
-            // set the owning side to null (unless already changed)
-            if ($k->getPhoto() === $this) {
-                $k->setPhoto(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getDecoMuralePhoto(): ?DecoMuralePhoto
     {

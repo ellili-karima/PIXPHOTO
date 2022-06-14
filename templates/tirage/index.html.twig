@@ -7,7 +7,7 @@
         <div class='container'>
             <div class='row'>
                 <div class='col-8'>
-                    <img src="{{ asset('images/tirage/tirage.png') }}" class="card-img-top" alt="tirage">
+                    <img src="{{ asset('images/tirage/tirage.png') }}" class="card-img-top zoom" alt="tirage">
                 </div>
                 <div class='col-4 m-auto'>
                     <h2>Tirage photo Premium</h2>
@@ -15,21 +15,25 @@
                         <li>Tirages classiques et originaux</li>
                         <li>Papier premium brillant FUJIFILM</li>
                         <li>La jolie simplicité du format standard</li>
-                        <li>Format flexible qui s'adapte au rapport de votre fichier</li>
                     </ul>
-                    <p class='text-center'><a href="" class=" btn btn-outline-danger lien">J'en profite</a></p>
+                    <p class='text-center'><a href="#prix" class=" btn btn-outline-danger lien">Voir nos prix</a></p>
                 </div>
             </div>
         </div>
     </section>
-    <section>
+    <section id='tirage'>
         <div class='container'>
+            <div class="row">
+                <div class="col-12">
+                    <p class='fs-6'><a href="">Page d'accueil</a><span class='text-muted'> > Titage photo </span></p>
+                </div>
+            </div>
             <div class='row'>
                 {# <h4 class='text-center mb-5'> Votre téléphone est plein à craquer ? Faites de la place, imprimez vos photos de vacances – là au moins, vous en profiterez vraiment.</h4> #}
                 
                 <div class='col-4'>
                     <div class="card border-0 shadow" style="width: 18rem;">
-                        <img src="{{ asset('images/tirage/tirage1.jpg') }}" class="card-img-top zoom" alt="tirage">
+                        <img src="{{ asset('images/tirage/tirage1.jpg') }}" class="card-img-top" alt="tirage">
                         <div class="card-body">
                             <h5 class="card-title">Tirage standard</h5>
                             <p class="text-muted fs-6">À partir de {{PrixMinTirageStandard}} €</p>
@@ -38,7 +42,7 @@
                                     <li>Formats disponibles : 10x15 , 13x18 , 15x21 et 18x24 cm</li>
                                 </ul>
                             </p>
-                            <p class='text-center'><a href="{{path('app_tirage_photo_index', {'tirage':'Tirage Photo'})}}" class=" btn btn-danger lien">Je creé</a></p>
+                            <p class='text-center'><a href="{{path('app_tirage_photo_index', {'tirage':'Tirage Standard'})}}" class=" btn btn-danger lien">Je creé</a></p>
                         </div>
                     </div>
                 </div>
@@ -48,7 +52,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Tirage en quantité</h5>
                             <p class="card-text">Faites grande impression chez PIXPHOTO et bénéficiez pour vos tirages photo en grande quantité de jusqu'à 25% offert.</p>
-                            <p class='text-center'><a href="#"  class="btn btn-outline-danger lien">J'en profite</a></p>
+                            <p class='text-center'><a href="#tirage-quantite"  class="btn btn-outline-danger lien">J'en profite</a></p>
                         </div>
                     </div>   
                 </div>
@@ -77,7 +81,7 @@
                     <h2 class='text-center mt-3'>Développement en grande quantité</h2>
                 </div>
             </div>
-            <div class='row'>
+            <div class='row' id='tirage-quantite'>
                 <div class='col-4'>
                     <div class="card bg-light mt-5 mb-5" style="width: 18rem;">
                         <img src="{{ asset('images/tirage/tirage-en-quantite.jpg') }}" class="card-img-top" alt="grande-quantité" >
@@ -129,5 +133,40 @@
         }
         console.log(lien)
     </script> #}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class='text-center' id='prix'>Nos Prix</h3>
+                    <table class='table'>
+                        <tr class='text-center'>
+                            <th>Tirage Standard</th>
+                            <th>Tirage Identite</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul>
+                                    {% for tirage in tirages %}
+                                        {% if tirage.tirage == 'Tirage Standard' %}
+                                            <li>{{tirage.format}} => {{tirage.prix}} €</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for tirage in tirages %}
+                                        {% if tirage.tirage == 'Tirage Identite' %}
+                                            <li>{{tirage.format}} => {{tirage.prix}} €</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
     	
 {% endblock %}

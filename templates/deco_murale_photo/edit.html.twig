@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit DecoMuralePhoto{% endblock %}
+
+{% block body %}
+    <h1>Edit DecoMuralePhoto</h1>
+
+    {{ include('deco_murale_photo/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_deco_murale_photo_index') }}">back to list</a>
+
+    {{ include('deco_murale_photo/_delete_form.html.twig') }}
+{% endblock %}

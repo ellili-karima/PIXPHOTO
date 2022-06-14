@@ -90,7 +90,7 @@
                             {{ include('tirage_photo/_delete_form.html.twig') }}
                         </td> 
                         <td>  
-                            <a href="{{path('cart_add', {'id': tirage_photo.id , 'tirage' : tirage})}}" class='btn btn-success'><i class="fa-solid fa-cart-shopping"></i> Ajouter</a>
+                            <a href="{{path('cart_add_tirage', {'id': tirage_photo.id , 'tirage' : tirage})}}" class='btn btn-success'><i class="fa-solid fa-cart-shopping"></i> Ajouter</a>
                         </td>
                     </tr>
                     {# <tr>
@@ -131,4 +131,5 @@
     {% endif %}
     </div>
 </section>
+
 {% endblock %}

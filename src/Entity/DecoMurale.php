@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\DecoMuraleRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Couleur;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\DecoMuraleRepository;
 
 #[ORM\Entity(repositoryClass: DecoMuraleRepository::class)]
 class DecoMurale
@@ -24,14 +23,17 @@ class DecoMurale
     #[ORM\Column(type: 'float', nullable: true)]
     private $epaisseur;
 
-    #[ORM\Column(type: 'string', length: 10, nullable: true)]
-    private $couleur;
-
+    
     #[ORM\Column(type: 'float')]
     private $prix;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private $stock;
+
+    #[ORM\ManyToOne(targetEntity: Couleur::class, inversedBy: 'decoMurales')]
+    private $couleur;
+
+
 
     public function getId(): ?int
     {
@@ -74,18 +76,6 @@ class DecoMurale
         return $this;
     }
 
-    public function getCouleur(): ?string
-    {
-        return $this->couleur;
-    }
-
-    public function setCouleur(?string $couleur): self
-    {
-        $this->couleur = $couleur;
-
-        return $this;
-    }
-
     public function getPrix(): ?float
     {
         return $this->prix;
@@ -109,5 +99,24 @@ class DecoMurale
 
         return $this;
     }
+
+    public function getCouleur(): ?Couleur
+    {
+        return $this->couleur;
+    }
+
+    public function setCouleur(?Couleur $couleur): self
+    {
+        $this->couleur = $couleur;
+
+        return $this;
+    }
+
+     
+    public function __toString()
+    {
+        return $this->getStock();
+    }
+    
 
 }

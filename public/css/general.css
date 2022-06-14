@@ -8,7 +8,7 @@ font-family: 'Song Myung', serif; */
 
 /* ============ desktop view ============ */
 @media all and (min-width: 992px) {
-    .navbar .nav-item a:hover{border-bottom: 3px solid rgb(216, 5, 5);}
+    /* .navbar .nav-item a:hover{border-bottom: 3px solid rgb(216, 5, 5);} */
 	.navbar .nav-item .dropdown-menu{ display: none; }
 	.navbar .nav-item:hover .dropdown-menu{ display: block; }
 	.navbar .nav-item .dropdown-menu{ margin-top:0; }
@@ -16,15 +16,51 @@ font-family: 'Song Myung', serif; */
 /* ============ desktop view .end// ============ */
 
 
+.navbar .megamenu{ padding: 1rem; }
+/* ============ desktop view ============ */
+@media all and (min-width: 992px) {
+	
+	.navbar .has-megamenu{position:static!important;}
+	.navbar .megamenu{left:0; right:0; width:100%; margin-top:0;  }
+	
+}	
+/* ============ desktop view .end// ============ */
+
+
+/* ============ mobile view ============ */
+@media(max-width: 991px){
+	.navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse{
+		overflow-y: auto;
+	    max-height: 90vh;
+	    margin-top:10px;
+	}
+}
+
+
+
+
+/* Effet de zoom */
+
+.zoom {
+    transition-duration: 0.7s;
+}
+
+.zoom:hover {
+    transform: scale(1.1);
+}
+
+
+/*********************/
+
+.col-megamenu img{
+    width: 200px;
+}
 
 
 h2{
     font-family: 'Montserrat', sans-serif;
 }
-#haut_nav{
-    height: 5px;
-    background-color: rgb(218, 5, 5);
-}
+
 /* le menu */
 .megamenu {
     position: static;
@@ -36,7 +72,7 @@ border: none;
 width: 100%;
 }
 #logo{
-    width: 200px;
+    width:200px;
 }
   
 #apropos{

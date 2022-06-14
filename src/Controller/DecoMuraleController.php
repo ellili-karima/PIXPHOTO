@@ -2,47 +2,103 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\DecoMurale;
+use App\Form\DecoMuraleType;
+use App\Repository\DecoMuraleRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/deco/murale')]
 class DecoMuraleController extends AbstractController
 {
-    #[Route('/deco/murale', name: 'app_deco_murale')]
-    public function index(): Response
+    #[Route('/', name: 'app_deco_murale_index', methods: ['GET'])]
+    public function index(DecoMuraleRepository $decoMuraleRepository): Response
     {
         return $this->render('deco_murale/index.html.twig', [
-            'controller_name' => 'DecoMuraleController',
+            'deco_murales' => $decoMuraleRepository->findAll(),
         ]);
     }
 
-    #[Route('/deco/murale/tile', name: 'app_deco_murale_tile')]
+    #[Route('/new', name: 'app_deco_murale_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, DecoMuraleRepository $decoMuraleRepository): Response
+    {
+        $decoMurale = new DecoMurale();
+        $form = $this->createForm(DecoMuraleType::class, $decoMurale);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $decoMuraleRepository->add($decoMurale);
+            return $this->redirectToRoute('app_deco_murale_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('deco_murale/new.html.twig', [
+            'deco_murale' => $decoMurale,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_deco_murale_show', methods: ['GET'])]
+    public function show(DecoMurale $decoMurale): Response
+    {
+        return $this->render('deco_murale/show.html.twig', [
+            'deco_murale' => $decoMurale,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_deco_murale_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, DecoMurale $decoMurale, DecoMuraleRepository $decoMuraleRepository): Response
+    {
+        $form = $this->createForm(DecoMuraleType::class, $decoMurale);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $decoMuraleRepository->add($decoMurale);
+            return $this->redirectToRoute('app_deco_murale_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('deco_murale/edit.html.twig', [
+            'deco_murale' => $decoMurale,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_deco_murale_delete', methods: ['POST'])]
+    public function delete(Request $request, DecoMurale $decoMurale, DecoMuraleRepository $decoMuraleRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$decoMurale->getId(), $request->request->get('_token'))) {
+            $decoMuraleRepository->remove($decoMurale);
+        }
+
+        return $this->redirectToRoute('app_deco_murale_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/deco/murale/tiles', name: 'app_deco_murale_tiles')]
     public function tile(): Response
     {
-        return $this->render('deco_murale/tile.html.twig', [
-            'controller_name' => 'DecoMuraleController',
+        return $this->render('deco_murale/tiles.html.twig', [
+            'support' => 'Tiles',
         ]);
     }
 
-    #[Route('/deco/murale/toile', name: 'app_deco_murale_toile')]
+    #[Route('/toile', name: 'app_deco_murale_toile')]
     public function toile(): Response
     {
         return $this->render('deco_murale/toile.html.twig', [
-            'controller_name' => 'DecoMuraleController',
         ]);
     }
-    #[Route('/deco/murale/mdf', name: 'app_deco_murale_mdf')]
+    #[Route('/mdf', name: 'app_deco_murale_mdf')]
     public function mdf(): Response
     {
         return $this->render('deco_murale/mdf.html.twig', [
-            'controller_name' => 'DecoMuraleController',
         ]);
     }
-    #[Route('/deco/murale/cadre', name: 'app_deco_murale_cadre')]
+    #[Route('/cadre', name: 'app_deco_murale_cadre')]
     public function cadre(): Response
     {
         return $this->render('deco_murale/cadre.html.twig', [
-            'controller_name' => 'DecoMuraleController',
         ]);
     }
 }

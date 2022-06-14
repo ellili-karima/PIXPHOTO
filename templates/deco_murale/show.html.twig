@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DecoMurale{% endblock %}
+
+{% block body %}
+    <h1>DecoMurale</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ deco_murale.id }}</td>
+            </tr>
+            <tr>
+                <th>Support</th>
+                <td>{{ deco_murale.support }}</td>
+            </tr>
+            <tr>
+                <th>Format</th>
+                <td>{{ deco_murale.format }}</td>
+            </tr>
+            <tr>
+                <th>Epaisseur</th>
+                <td>{{ deco_murale.epaisseur }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ deco_murale.prix }}</td>
+            </tr>
+            <tr>
+                <th>Stock</th>
+                <td>{{ deco_murale.stock }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_deco_murale_index') }}">back to list</a>
+
+    <a href="{{ path('app_deco_murale_edit', {'id': deco_murale.id}) }}">edit</a>
+
+    {{ include('deco_murale/_delete_form.html.twig') }}
+{% endblock %}

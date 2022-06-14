@@ -1,19 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Décoration Murale{% endblock %}
-{% block javascripts %}
-			<script src="{{ asset('js/menu.js') }}"></script>
-{% endblock %}
+{% block title %}DecoMurale index{% endblock %}
 
 {% block body %}
-   <section>
+    <h1>DecoMurale</h1>
+    <section>
         <div class='container'>
             <div class='row'>
                 <div class="col-6">
-                    <a href="{{path('app_deco_murale_tile')}}">Tile</a>
+                    <a href="{{path('app_deco_murale_tiles', {'support':'Tiles'})}}">Tiles</a>
                 </div>
                 <div class="col-6">
-                    <a href="">Toile</a>
+                    <a href="">Toiles</a>
                 </div>
                 <div class="col-6">
                     <a href="">mdf</a>
@@ -24,9 +22,41 @@
             </div>
         </div>
    </section>
-   <section>
-   
-   </section>
-     
-    			
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Support</th>
+                <th>Format</th>
+                <th>Epaisseur</th>
+                <th>Prix</th>
+                <th>Stock</th>
+                <th>Couleur</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for deco_murale in deco_murales %}
+            <tr>
+                <td>{{ deco_murale.id }}</td>
+                <td>{{ deco_murale.support }}</td>
+                <td>{{ deco_murale.format }}</td>
+                <td>{{ deco_murale.epaisseur }}</td>
+                <td>{{ deco_murale.prix }}</td>
+                <td>{{ deco_murale.stock }}</td>
+                <td>
+                    <a href="{{ path('app_deco_murale_show', {'id': deco_murale.id}) }}">show</a>
+                    <a href="{{ path('app_deco_murale_edit', {'id': deco_murale.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_deco_murale_new') }}">Create new</a>
 {% endblock %}
